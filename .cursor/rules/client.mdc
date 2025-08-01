@@ -1,0 +1,103 @@
+---
+alwaysApply: false
+---
+- Use functional components and hooks for state management.
+- Implement PropTypes or TypeScript for type checking.
+- Use React's Context API for global state management.
+- Optimize performance with React.memo and useCallback.
+- Ensure accessibility with ARIA roles and attributes.
+
+---
+
+name: javascript-best-practices.mdc  
+description: JavaScript coding standards and best practices  
+globs: **/*.{js,jsx}  
+---  
+
+- Use ES6+ features like arrow functions, destructuring, and template literals.
+- Avoid global variables; use IIFE or modules.
+- Use `const` and `let` instead of `var` for variable declarations.
+- Implement error handling with try-catch blocks.
+- Write modular code by using functions and modules.
+
+---
+
+name: typescript-best-practices.mdc  
+description: TypeScript coding standards and type safety guidelines  
+globs: **/*.{ts,tsx}  
+---  
+
+- Use strict null checks to avoid runtime errors.
+- Prefer interfaces over type aliases for object shapes.
+- Use type guards and assertions for better type safety.
+- Implement proper type inference to reduce redundancy.
+- Keep types organized in separate files for better maintainability.
+
+---
+
+name: tailwindcss-best-practices.mdc  
+description: Best practices for styling with Tailwind CSS  
+globs: **/*.{ts,tsx,css}  
+---  
+
+- Use utility-first classes for styling instead of custom CSS.
+- Leverage responsive design features with Tailwind's responsive utilities.
+- Use Tailwind's JIT mode for better performance and flexibility.
+- Organize classes using Tailwind's @apply directive for reusability.
+- Ensure accessibility by using semantic HTML elements.
+
+---
+
+name: shadcn-best-practices.mdc  
+description: Guidelines for using Shadcn UI components  
+globs: **/*.{ts,tsx}  
+---  
+
+- Follow Shadcn's component structure and naming conventions.
+- Use Shadcn's built-in accessibility features for components.
+- Customize components using Tailwind CSS for consistent styling.
+- Keep components reusable and composable.
+- Document component usage and props for better collaboration.
+
+---
+
+name: html-best-practices.mdc  
+description: Best practices for writing HTML  
+globs: **/*.html  
+---  
+
+- Use semantic HTML elements for better SEO and accessibility.
+- Ensure all images have alt attributes for screen readers.
+- Use proper heading hierarchy (h1, h2, h3, etc.) for structure.
+- Minimize inline styles; use classes for styling.
+- Validate HTML to ensure compliance with standards.
+
+---
+
+name: css-best-practices.mdc  
+description: CSS coding standards and best practices  
+globs: **/*.css  
+---  
+
+- Use BEM (Block Element Modifier) methodology for class naming.
+- Avoid using IDs for styling; prefer classes.
+- Keep CSS modular and organized in separate files.
+- Use CSS preprocessors (like SASS) for better maintainability.
+- Minimize specificity to avoid conflicts and make overrides easier.
+
+---
+
+name: responsiveness-best-practices.mdc  
+description: Guidelines for building responsive web applications  
+globs: **/*.{ts,tsx,css}  
+---  
+
+- Use flexible grid layouts and media queries for responsiveness.
+- Implement mobile-first design principles.
+- Test across multiple devices and screen sizes.
+- Use relative units (like em, rem, %) instead of fixed units (px).
+- Ensure touch targets are large enough for mobile users.
+
+--- 
+
+Feel free to adapt the globs and practices as needed for your specific project!

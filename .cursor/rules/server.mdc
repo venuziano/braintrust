@@ -1,0 +1,67 @@
+---
+alwaysApply: false
+---
+- Use strict null checks.
+- Prefer interface over type.
+- Use type guards and assertions.
+- Implement proper type inference.
+- Document public classes and methods with JSDoc.
+
+---
+name: nestjs-best-practices.mdc
+description: Best practices for NestJS applications and architecture
+globs: **/*.{ts,tsx}
+---
+
+- If you think there might not be a correct answer, you say so.
+- Follow Domain-Driven Design (DDD) and Clean Architecture principles.
+- Use a modular architecture with one module per main domain/route.
+- Encapsulate the API in modules, with one controller per route.
+- Use DTOs validated with class-validator for inputs and simple types for outputs.
+- Implement a service module for business logic and persistence, with one service per entity.
+- Create a core module for global filters, middlewares, guards, and interceptors.
+- Utilize a shared module for common services and utilities.
+
+---
+name: database-best-practices.mdc
+description: Best practices for database interactions and SQL syntax
+globs: **/*.{ts,tsx}
+---
+
+- Use PostgreSQL relationships effectively.
+- Write clear and maintainable SQL syntax.
+- Encapsulate database logic within repositories.
+- Prefer using TypeORM for data persistence with proper entity definitions.
+
+---
+name: exceptions-best-practices.mdc
+description: Guidelines for exception handling in applications
+globs: **/*.{ts,tsx}
+---
+
+- Use exceptions for unexpected errors only.
+- Catch exceptions to fix expected problems or add context.
+- Implement a global exception handler for unhandled errors.
+
+---
+name: classes-best-practices.mdc
+description: Best practices for class design and implementation
+globs: **/*.{ts,tsx}
+---
+
+- Follow SOLID principles for class design.
+- Prefer composition over inheritance for better flexibility.
+- Keep classes small and focused on a single responsibility.
+- Declare interfaces to define contracts for class behavior.
+
+---
+name: functions-best-practices.mdc
+description: Best practices for function and method design
+globs: **/*.{ts,tsx}
+---
+
+- Name functions with a verb and a descriptive term.
+- Avoid nesting by using early returns and utility functions.
+- Use higher-order functions (map, filter, reduce) to simplify logic.
+- Reduce function parameters by using objects for input and output.
+- Maintain a single level of abstraction within functions.

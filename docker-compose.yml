@@ -1,0 +1,51 @@
+services:
+  app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3010:3010"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run start:dev"
+    depends_on:
+      - postgres
+    environment:
+      # NOTE: Defining hardcoded values since it's a test project.
+      # NOTE: Avoid you creating a .env file to run the docker container
+      API_PORT: 3010
+      POSTGRES_DB: braintrust
+      POSTGRES_USER: rrs
+      POSTGRES_PASSWORD: rrs
+      POSTGRES_TYPE: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres
+      JWT_SECRET: 4b5a6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
+      JWT_EXPIRES_IN: 1h
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: braintrust
+      POSTGRES_USER: rrs
+      POSTGRES_PASSWORD: rrs
+    ports:
+      - "5432:5432"
+    volumes:
+      - braintrust-server-pg-data:/var/lib/postgresql/data
+
+volumes:
+  braintrust-server-pg-data:
