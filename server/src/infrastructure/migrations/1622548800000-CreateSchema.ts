@@ -76,6 +76,9 @@ export class CreateSchema1622548800000 implements MigrationInterface {
         "description" text,
         "time_saved_per_exec" interval,
         "cost_saved_per_exec" numeric(10, 2),
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
+        "deleted_at" TIMESTAMP,
         CONSTRAINT "PK_m8m8m8m8m8m8m8m8m8m8m8m8m8m" PRIMARY KEY ("id"),
         CONSTRAINT "FK_m8m8m8m8m8m8m8m8m8m8m8m8m8m" FOREIGN KEY ("client_id") REFERENCES "clients"("id"),
         CONSTRAINT "FK_n8n8n8n8n8n8n8n8n8n8n8n8n8n" FOREIGN KEY ("department_id") REFERENCES "departments"("id")

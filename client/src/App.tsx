@@ -45,7 +45,6 @@ export default function App() {
           flexDirection: 'column',
         }}
       >
-
         {/* Menu Items */}
         <nav
           style={{
@@ -68,19 +67,33 @@ export default function App() {
                 borderRadius: 'var(--radius)',
                 backgroundColor:
                   selected === item.key
-                    ? 'var(--muted)'
+                    ? 'var(--sidebar-accent)'
                     : 'transparent',
                 color:
                   selected === item.key
-                    ? 'var(--foreground)'
+                    ? 'var(--sidebar-accent-foreground)'
                     : 'var(--sidebar-foreground)',
                 border: 'none',
                 cursor: 'pointer',
                 gap: '12px',
+                transition: 'all 0.2s ease',
+                fontSize: '14px',
+              }}
+              onMouseEnter={(e) => {
+                if (selected !== item.key) {
+                  e.currentTarget.style.backgroundColor = 'var(--sidebar-accent)';
+                  e.currentTarget.style.color = 'var(--sidebar-accent-foreground)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selected !== item.key) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'var(--sidebar-foreground)';
+                }
               }}
             >
-              <item.icon className="w-6 h-6" />
-              <span style={{ fontSize: '14px' }}>{item.label}</span>
+              <item.icon style={{ width: '24px', height: '24px' }} />
+              <span>{item.label}</span>
             </button>
           ))}
         </nav>
@@ -111,8 +124,8 @@ export default function App() {
           style={{
             flex: 1,
             padding: '24px',
-            backgroundColor: 'var(--sidebar)',
-            color: 'var(--sidebar-foreground)',
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
           }}
         >
           <PageContent title={selected} />

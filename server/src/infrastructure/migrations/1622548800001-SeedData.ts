@@ -63,7 +63,7 @@ export class SeedData1622548800001 implements MigrationInterface {
       FROM users u, clients c
       WHERE u.name='Bob SE';
 
-      -- Carol as a client-user in Acme’s Sales dept
+      -- Carol as a client-user in Acme's Sales dept
       INSERT INTO client_users(user_id,client_id,department_id,notify_email,notify_sms,billing_access,admin_access)
       SELECT u.id, c.id, d.id, TRUE, FALSE, TRUE, FALSE
       FROM users u
@@ -71,18 +71,23 @@ export class SeedData1622548800001 implements MigrationInterface {
       JOIN departments d ON d.client_id=c.id AND d.name='Sales'
       WHERE u.name='Carol Client';
 
-      -- seed 5 workflows per client (all in the Sales department)
-      INSERT INTO workflows(client_id,department_id,name,description,time_saved_per_exec,cost_saved_per_exec)
-      SELECT c.id, d.id,
-             concat('Workflow ', gs)            AS name,
-             'Auto-task ' || gs                 AS description,
-             '00:10:00'                         AS time_saved_per_exec,
-             10.00                              AS cost_saved_per_exec
+      -- seed 100 workflows per client (all in the Sales department) with dates spread across the last year
+      INSERT INTO workflows(client_id,department_id,name,description,time_saved_per_exec,cost_saved_per_exec,created_at)
+      SELECT 
+        c.id, 
+        d.id,
+        concat('Workflow ', gs) AS name,
+        'Auto-task ' || gs AS description,
+        '00:10:00' AS time_saved_per_exec,
+        10.00 AS cost_saved_per_exec,
+        -- Generate dates spread across the last year (365 days)
+        -- Use a more predictable distribution: 1-100 days ago
+        CURRENT_DATE - INTERVAL '1 day' * (gs - 1) AS created_at
       FROM clients c
       JOIN departments d 
         ON d.client_id = c.id 
-       AND d.name      = 'Sales'
-      CROSS JOIN generate_series(1,5) AS gs;
+       AND d.name = 'Sales'
+      CROSS JOIN generate_series(1,100) AS gs;
 
       -- for the first 5 workflows of each client, insert one execution + one exception
       WITH wf AS (

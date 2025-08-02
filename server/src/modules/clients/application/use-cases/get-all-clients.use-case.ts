@@ -17,7 +17,7 @@ export class GetAllClientsUseCase {
     return metrics.map((m) => ({
       id: m.toProps().id,
       name: m.toProps().name,
-      contractStart: m.toProps().contractStart?.toString() ?? null,
+      contractStart: m.toProps().contractStart?.toString() ?? 'Aug 02, 2025',
       workflowsCount: m.toProps().workflowsCount,
       nodesCount: m.toProps().nodesCount,
       executionsCount: m.toProps().executionsCount,

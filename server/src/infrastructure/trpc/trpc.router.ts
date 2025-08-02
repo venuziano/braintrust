@@ -4,6 +4,7 @@ import superjson from 'superjson';
 import { RolesController } from '../../modules/roles/roles.controller';
 import { UsersController } from 'src/modules/users/users.controller';
 import { ClientsController } from '../../modules/clients/clients.controller';
+import { WorkflowsController } from '../../modules/workflows/workflows.controller';
 
 /**
  * Main tRPC instance
@@ -19,6 +20,7 @@ export class TrpcRouter {
     private readonly usersController: UsersController,
     private readonly rolesController: RolesController,
     private readonly clientsController: ClientsController,
+    private readonly workflowsController: WorkflowsController,
   ) {}
 
   /**
@@ -29,6 +31,7 @@ export class TrpcRouter {
       users: this.usersController.createRouter(),
       roles: this.rolesController.createRouter(),
       clients: this.clientsController.createRouter(),
+      workflows: this.workflowsController.createRouter(),
     });
   }
 }

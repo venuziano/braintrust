@@ -1,14 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { ClientSchema } from "../../../clients/infrastructure/typeorm/client.schema";
 import { DepartmentSchema } from "../../../departments/infrastructure/typeorm/department.schema";
 import { NodeSchema } from "../../../nodes/infrastructure/typeorm/node.schema";
 import { ExecutionSchema } from "../../../executions/infrastructure/typeorm/execution.schema";
+import { BaseSchema } from "src/shared/entities/base.schema";
 
 @Entity("workflows")
-export class WorkflowSchema {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class WorkflowSchema extends BaseSchema {
   @ManyToOne(() => ClientSchema, client => client.workflows)
   @JoinColumn({ name: "client_id" })
   client: ClientSchema;
