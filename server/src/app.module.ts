@@ -3,8 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
-import { TrpcModule } from './trpc/trpc.module';
+import { DatabaseModule } from './infrastructure/database/database.module';
+import { TrpcModule } from './infrastructure/trpc/trpc.module';
 
 @Module({
   imports: [

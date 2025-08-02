@@ -9,8 +9,8 @@ import {
   BarChart2,
   AlertCircleIcon,
 } from 'lucide-react'
-import { Header } from './components/Header';
-import { PageContent } from './components/PageContent';
+import { Header } from './components/Header'
+import { PageContent } from './components/PageContent'
 
 export default function App() {
   const navItems = [
@@ -27,63 +27,94 @@ export default function App() {
   const [selected, setSelected] = useState(navItems[0].key)
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      {/* Sidebar */}
-      <aside style={{
-        width: '240px',
-        backgroundColor: '#f9fafb',
-        borderRight: '1px solid #e5e7eb',
+    <div
+      style={{
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-        {/* Menu Items */}
-        <nav style={{
+        height: '100vh',
+        backgroundColor: 'var(--background)',
+        color: 'var(--foreground)',
+      }}
+    >
+      {/* Sidebar */}
+      <aside
+        style={{
+          width: '240px',
+          backgroundColor: 'var(--sidebar)',
+          borderRight: '1px solid var(--sidebar-border)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '8px',
-          flex: 1,
-          width: '100%',
-          alignItems: 'center',
-          padding: '8px 0',
-        }}>
+        }}
+      >
+
+        {/* Menu Items */}
+        <nav
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            width: '100%',
+            padding: '8px 0',
+          }}
+        >
           {navItems.map(item => (
             <button
               key={item.key}
               onClick={() => setSelected(item.key)}
               style={{
                 display: 'flex',
-                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'flex-start',
-                width: '100%',
-                padding: '8px 16px',
-                backgroundColor: selected === item.key ? '#e5e7eb' : 'transparent',
+                padding: selected === item.key ? '12px 16px' : '8px 16px',
+                margin: selected === item.key ? '12px 16px' : '8px 16px',
+                borderRadius: 'var(--radius)',
+                backgroundColor:
+                  selected === item.key
+                    ? 'var(--muted)'
+                    : 'transparent',
+                color:
+                  selected === item.key
+                    ? 'var(--foreground)'
+                    : 'var(--sidebar-foreground)',
                 border: 'none',
                 cursor: 'pointer',
+                gap: '12px',
               }}
             >
-              <item.icon className="w-6 h-6 text-gray-700" />
-              <span style={{
-                marginLeft: '8px',
-                fontSize: '14px',
-                color: '#374151',
-              }}>
-                {item.label}
-              </span>
+              <item.icon className="w-6 h-6" />
+              <span style={{ fontSize: '14px' }}>{item.label}</span>
             </button>
           ))}
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <main
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
         {/* Header Bar */}
-        <div style={{ padding: '16px 24px', backgroundColor: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
+        <div
+          style={{
+            padding: '16px 24px',
+            backgroundColor: 'var(--background)',
+            borderBottom: '1px solid var(--border)',
+          }}
+        >
           <Header title={selected} />
         </div>
+
         {/* Page Content Section */}
-        <div style={{ flex: 1, padding: '24px', backgroundColor: '#f3f4f6' }}>
+        <div
+          style={{
+            flex: 1,
+            padding: '24px',
+            backgroundColor: 'var(--sidebar)',
+            color: 'var(--sidebar-foreground)',
+          }}
+        >
           <PageContent title={selected} />
         </div>
       </main>

@@ -1,4 +1,5 @@
-import { BaseEntity, BaseEntityProps } from '../../../shared/entities/base.entity';
+import { BaseEntityProps, BaseEntity } from "src/shared/entities/base.entity";
+
 
 /**
  * User domain entity properties extending base entity properties

@@ -1,6 +1,6 @@
 import { All, Controller, Req, Res, Next } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { TrpcRouter } from './trpc/trpc.router';
+import { TrpcRouter } from './infrastructure/trpc/trpc.router';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 
 @Controller()

@@ -1,12 +1,19 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const shadcnPlugin = require('@shadcn/ui/plugin');
+
+module.exports = {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      // no manual colors: CSS variables from shadcn are used
+    },
   },
-  plugins: [],
+  plugins: [
+    shadcnPlugin,
+    require('tailwindcss-animate'),
+  ],
 };
   

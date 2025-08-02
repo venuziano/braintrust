@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { initTRPC } from '@trpc/server';
-import { UsersController } from '../users/users.controller';
+
+import { RolesController } from '../../modules/roles/roles.controller';
+import { UsersController } from 'src/modules/users/users.controller';
 
 /**
  * Main tRPC instance
@@ -12,7 +14,7 @@ const t = initTRPC.create();
  */
 @Injectable()
 export class TrpcRouter {
-  constructor(private readonly usersController: UsersController) {}
+  constructor(private readonly usersController: UsersController, private readonly rolesController: RolesController) {}
 
   /**
    * Creates the main application router
@@ -20,6 +22,7 @@ export class TrpcRouter {
   createRouter() {
     return t.router({
       users: this.usersController.createRouter(),
+      roles: this.rolesController.createRouter(),
     });
   }
 }

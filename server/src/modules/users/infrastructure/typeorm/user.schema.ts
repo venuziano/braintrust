@@ -1,5 +1,5 @@
+import { BaseSchema } from 'src/shared/entities/base.schema';
 import { Entity, Column } from 'typeorm';
-import { BaseSchema } from '../../../shared/entities/base.schema';
 
 /**
  * TypeORM entity representing the users table in the database
