@@ -40,7 +40,13 @@ export class SeedData1622548800001 implements MigrationInterface {
       INSERT INTO departments (client_id,name)
         SELECT id,'Sales' FROM clients WHERE name='Acme Corp'
       UNION ALL
-        SELECT id,'HR' FROM clients WHERE name='Acme Corp';
+        SELECT id,'HR'    FROM clients WHERE name='Acme Corp';
+
+      -- departments for Globex
+      INSERT INTO departments (client_id,name)
+        SELECT id,'Sales' FROM clients WHERE name='Globex Inc'
+      UNION ALL
+        SELECT id,'HR'    FROM clients WHERE name='Globex Inc';
 
       -- role assignments
       WITH u AS (SELECT id,name FROM users), r AS (SELECT id,name FROM roles)
@@ -48,10 +54,10 @@ export class SeedData1622548800001 implements MigrationInterface {
       SELECT u.id, r.id
       FROM u JOIN r ON
         (u.name='Alice Admin' AND r.name='Admin')
-        OR (u.name='Bob SE' AND r.name='Solutions Engineer')
+        OR (u.name='Bob SE'      AND r.name='Solutions Engineer')
         OR (u.name='Carol Client' AND r.name='Client');
 
-      -- SE assignments
+      -- SE assignments (Bob SE ➔ both clients)
       INSERT INTO se_assignments (se_id,client_id)
       SELECT u.id,c.id
       FROM users u, clients c
@@ -65,28 +71,38 @@ export class SeedData1622548800001 implements MigrationInterface {
       JOIN departments d ON d.client_id=c.id AND d.name='Sales'
       WHERE u.name='Carol Client';
 
-      -- one workflow, two nodes, one execution with exception
+      -- seed 5 workflows per client (all in the Sales department)
       INSERT INTO workflows(client_id,department_id,name,description,time_saved_per_exec,cost_saved_per_exec)
-      SELECT c.id, d.id,'Invoice Processing','Auto-post invoices', '00:15:00', 25.00
+      SELECT c.id, d.id,
+             concat('Workflow ', gs)            AS name,
+             'Auto-task ' || gs                 AS description,
+             '00:10:00'                         AS time_saved_per_exec,
+             10.00                              AS cost_saved_per_exec
       FROM clients c
-      JOIN departments d ON d.client_id=c.id
-      WHERE c.name='Acme Corp' AND d.name='Sales';
+      JOIN departments d 
+        ON d.client_id = c.id 
+       AND d.name      = 'Sales'
+      CROSS JOIN generate_series(1,5) AS gs;
 
-      WITH w AS (SELECT id FROM workflows WHERE name='Invoice Processing')
-      INSERT INTO nodes (workflow_id,name,node_type,settings)
-      VALUES 
-        ((SELECT id FROM w),'Fetch Bills','api_call','{"endpoint":"bill.com","method":"GET"}'),
-        ((SELECT id FROM w),'Post to Ariba','api_call','{"endpoint":"ariba","method":"POST"}');
-
-      WITH e AS (
-        INSERT INTO executions(workflow_id,succeeded,time_taken,cost_saved)
-        SELECT id, FALSE, '00:02:00', 0.0 FROM workflows WHERE name='Invoice Processing'
+      -- for the first 5 workflows of each client, insert one execution + one exception
+      WITH wf AS (
+        SELECT id,
+               client_id,
+               ROW_NUMBER() OVER (PARTITION BY client_id ORDER BY id) AS rn
+        FROM workflows
+      ),
+      execs AS (
+        INSERT INTO executions (workflow_id,succeeded,time_taken,cost_saved)
+        SELECT id, FALSE, '00:02:00', 10.0
+        FROM wf
+        WHERE rn <= 5
         RETURNING id
       )
       INSERT INTO exceptions (execution_id,exception_type,severity,remedy)
-      SELECT e.id,'Integration','High','Check API key'
-      FROM e;
+      SELECT execs.id, 'Integration','High','Check API key'
+      FROM execs;
 
+      -- notify Bob SE about every exception
       INSERT INTO exception_notifications (exception_id,user_id,method)
       SELECT ex.id, u.id, 'email'
       FROM exceptions ex
@@ -95,7 +111,6 @@ export class SeedData1622548800001 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // This migration is for seeding data, so we can leave the down method empty
-    // or truncate tables if necessary, but for this case, it is not required.
+    // no-op or truncate if needed
   }
 }

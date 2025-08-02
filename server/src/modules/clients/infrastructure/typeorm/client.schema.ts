@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { DepartmentSchema } from "../../../departments/infrastructure/typeorm/department.schema";
-import { WorkflowSchema } from "../../../workflows/infrastructure/typeorm/workflow.schema";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { DepartmentSchema } from '../../../departments/infrastructure/typeorm/department.schema';
+import { WorkflowSchema } from '../../../workflows/infrastructure/typeorm/workflow.schema';
 
-@Entity("clients")
+@Entity('clients')
 export class ClientSchema {
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,12 +10,12 @@ export class ClientSchema {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   url: string | null;
-  
-  @OneToMany(() => DepartmentSchema, department => department.client)
+
+  @OneToMany(() => DepartmentSchema, (department) => department.client)
   departments: DepartmentSchema[];
 
-  @OneToMany(() => WorkflowSchema, workflow => workflow.client)
+  @OneToMany(() => WorkflowSchema, (workflow) => workflow.client)
   workflows: WorkflowSchema[];
-} 
+}

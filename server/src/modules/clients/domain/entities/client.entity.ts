@@ -7,6 +7,10 @@ export interface ClientProps {
 export class Client {
   constructor(private props: ClientProps) {}
 
+  public static fromProps(props: ClientProps): Client {
+    return new Client(props);
+  }
+
   get id(): number {
     return this.props.id;
   }
@@ -18,4 +22,8 @@ export class Client {
   get url(): string | null {
     return this.props.url;
   }
-} 
+
+  public toProps(): ClientProps {
+    return { ...this.props };
+  }
+}

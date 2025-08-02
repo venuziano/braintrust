@@ -1,5 +1,4 @@
-import { BaseEntityProps, BaseEntity } from "src/shared/entities/base.entity";
-
+import { BaseEntityProps, BaseEntity } from 'src/shared/entities/base.entity';
 
 /**
  * User domain entity properties extending base entity properties
@@ -84,4 +83,4 @@ export class User extends BaseEntity {
       throw new Error('Password hash is required');
     }
   }
-} 
+}

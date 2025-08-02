@@ -10,7 +10,7 @@ export class AppController {
   @All('/trpc/*path')
   trpc(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
     const router = this.trpcRouter.createRouter();
-    
+
     const handler = createExpressMiddleware({
       router,
       createContext: () => ({}),
@@ -18,7 +18,7 @@ export class AppController {
         console.error(`❌ tRPC failed on ${path}: ${error}`);
       },
     });
-    
+
     return handler(req, res, next);
   }
 }

@@ -1,10 +1,16 @@
 import React from 'react';
+import { useClients } from '../api/clients';
 
 interface PageContentProps {
   title: string;
 }
 
 export function PageContent({ title }: PageContentProps) {
+  const { data, isLoading, error } = useClients();
+
+  if (isLoading) return <div>Loading…</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
       {/* Card Header */}
@@ -46,19 +52,29 @@ export function PageContent({ title }: PageContentProps) {
               <th style={{ padding: '12px' }}>Money Saved</th>
             </tr>
           </thead>
-          <tbody>
-            <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <td style={{ padding: '12px' }}><a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Acme Corp</a></td>
-              <td style={{ padding: '12px' }}>Jan 15, 2025</td>
-              <td style={{ padding: '12px' }}>24</td>
-              <td style={{ padding: '12px' }}>156</td>
-              <td style={{ padding: '12px' }}>1,847</td>
-              <td style={{ padding: '12px' }}>12</td>
-              <td style={{ padding: '12px' }}>$24,500</td>
-              <td style={{ padding: '12px' }}>284h</td>
-              <td style={{ padding: '12px' }}>$42,600</td>
+          {data!.map(c => (
+            <tr
+              key={c.id}
+              style={{ borderBottom: '1px solid var(--border)' }}
+            >
+              <td style={{ padding: '12px' }}>
+                <a
+                  href={`/clients/${c.id}`}
+                  style={{ color: 'var(--primary)', textDecoration: 'none' }}
+                >
+                  {c.name}
+                </a>
+              </td>
+              <td style={{ padding: '12px' }}>{c.contractStart}</td>
+              <td style={{ padding: '12px' }}>{c.workflowsCount}</td>
+              <td style={{ padding: '12px' }}>{c.nodesCount}</td>
+              <td style={{ padding: '12px' }}>{c.executionsCount}</td>
+              <td style={{ padding: '12px' }}>{c.exceptionsCount}</td>
+              <td style={{ padding: '12px' }}>${c.revenue.toLocaleString()}</td>
+              <td style={{ padding: '12px' }}>{c.timeSaved}</td>
+              <td style={{ padding: '12px' }}>${c.moneySaved.toLocaleString()}</td>
             </tr>
-          </tbody>
+          ))}
         </table>
       </div>
     </div>

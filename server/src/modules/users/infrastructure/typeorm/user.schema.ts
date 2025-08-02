@@ -18,4 +18,4 @@ export class UserSchema extends BaseSchema {
 
   @Column({ type: 'text', nullable: false })
   password_hash: string;
-} 
+}

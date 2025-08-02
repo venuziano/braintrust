@@ -24,7 +24,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       order: { created_at: 'DESC' },
     });
 
-    return userSchemas.map(this.toDomainEntity);
+    return userSchemas.map((user) => this.toDomainEntity(user));
   }
 
   /**
@@ -108,4 +108,4 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
 
     return schema;
   }
-} 
+}

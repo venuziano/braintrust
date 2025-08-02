@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { ExecutionSchema } from "../../../executions/infrastructure/typeorm/execution.schema";
-import { ExceptionNotificationSchema } from "../../../exception_notifications/infrastructure/typeorm/exception-notification.schema";
+import { ExceptionNotificationSchema } from "../../../exception-notifications/infrastructure/typeorm/exception-notification.schema";
 
 @Entity("exceptions")
 export class ExceptionSchema {
