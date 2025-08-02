@@ -14,6 +14,8 @@ services:
     environment:
       # NOTE: Defining hardcoded values since it's a test project.
       # NOTE: Avoid you creating a .env file to run the docker container
+      # NOTE: For a real project, we use '.env' file for local development,
+      # and for production environments, we use Github Actions, AWS, or any cloud secrets.
       API_PORT: 3010
       POSTGRES_DB: braintrust
       POSTGRES_USER: rrs
@@ -33,6 +35,7 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host"
     depends_on:
       - app
 

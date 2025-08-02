@@ -9,6 +9,8 @@ import { join } from 'path';
       imports: [],
       // NOTE: Defining hardcoded values since it's a test project.
       // NOTE: Avoid you creating a .env file to run the docker container properly.
+      // NOTE: For a real project, we use '.env' file for local development,
+      // and for production environments, we use Github Actions, AWS, or any cloud secrets.
       useFactory: () => ({
         type: 'postgres',
         host: 'host.docker.internal',

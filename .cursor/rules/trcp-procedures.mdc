@@ -1,0 +1,156 @@
+---
+alwaysApply: false
+---
+The following are the trcp procedures the server will have:
+Lookup Data
+roles
+Procedure	Input
+roles.getAll	none
+roles.getById	{ id: UUID }
+roles.create	{ name: string }
+roles.update	{ id: UUID; name?: string }
+roles.delete	{ id: UUID }
+
+pipelinePhases
+Procedure	Input
+pipelinePhases.getAll	none
+pipelinePhases.getById	{ id: UUID }
+pipelinePhases.create	{ name: string; phaseOrder: number }
+pipelinePhases.update	{ id: UUID; name?: string; phaseOrder?: number }
+pipelinePhases.delete	{ id: UUID }
+
+👥 Users & Access
+users
+Procedure	Input
+users.getAll	{ clientId?: UUID } (optional filter by client)
+users.getById	{ id: UUID }
+users.create	{ name: string; email: string; phone?: string }
+users.update	{ id: UUID; name?: string; email?: string; phone?: string }
+users.delete	{ id: UUID }
+
+clients
+Procedure	Input
+clients.getAll	none
+clients.getById	{ id: UUID }
+clients.create	{ name: string; url?: string }
+clients.update	{ id: UUID; name?: string; url?: string }
+clients.delete	{ id: UUID }
+
+departments
+Procedure	Input
+departments.getAll	{ clientId: UUID }
+departments.getById	{ id: UUID }
+departments.create	{ clientId: UUID; name: string }
+departments.update	{ id: UUID; name?: string }
+departments.delete	{ id: UUID }
+
+userRoles
+Procedure	Input
+userRoles.getAll	{ userId?: UUID; roleId?: UUID }
+userRoles.assign	{ userId: UUID; roleId: UUID }
+userRoles.remove	{ userId: UUID; roleId: UUID }
+
+seAssignments (Solutions Engineers → Clients)
+Procedure	Input
+seAssignments.getAll	{ clientId?: UUID; seId?: UUID }
+seAssignments.assign	{ seId: UUID; clientId: UUID }
+seAssignments.remove	{ seId: UUID; clientId: UUID }
+
+clientUsers
+Procedure	Input
+clientUsers.getAll	{ clientId?: UUID; userId?: UUID }
+clientUsers.getById	{ id: UUID }
+clientUsers.create	{ userId: UUID; clientId: UUID; departmentId?: UUID; notifyEmail: boolean; notifySms: boolean; billingAccess: boolean; adminAccess: boolean }
+clientUsers.update	{ id: UUID; departmentId?: UUID; notifyEmail?: boolean; notifySms?: boolean; billingAccess?: boolean; adminAccess?: boolean }
+clientUsers.delete	{ id: UUID }
+
+📄 Documents & Credentials
+clientDocuments
+Procedure	Input	Notes
+clientDocuments.getAll	{ clientId: UUID }	
+clientDocuments.getById	{ id: UUID }	
+REST POST /api/clients/:clientId/documents	form-data:
+docType: string
+file: File	file upload
+clientDocuments.update	{ id: UUID; docType?: string; url?: string }	
+clientDocuments.delete	{ id: UUID }	
+
+credentials
+Procedure	Input
+credentials.getAll	{ clientId: UUID }
+credentials.getById	{ id: UUID }
+credentials.create	{ clientId: UUID; serviceName: string; credentialsData: JSON }
+credentials.update	{ id: UUID; serviceName?: string; credentialsData?: JSON; statusConnected?: boolean }
+credentials.delete	{ id: UUID }
+credentials.connect	{ id: UUID } (sets statusConnected = true)
+
+💳 Subscriptions & Billing
+subscriptionPlans
+Procedure	Input
+subscriptionPlans.getAll	none
+subscriptionPlans.getById	{ id: UUID }
+subscriptionPlans.create	{ name: string; pricingModel: string; contractLength: string; billingCadence: string; setupFee?: number; prepaymentPercent?: number; capAmount?: number; overageCost?: number; creditsPerPeriod?: number; pricePerCredit?: number; productUsageApi?: string }
+subscriptionPlans.update	{ id: UUID; …any of above fields… }
+subscriptionPlans.delete	{ id: UUID }
+
+clientSubscriptions
+Procedure	Input
+clientSubscriptions.getAll	{ clientId: UUID }
+clientSubscriptions.getById	{ id: UUID }
+clientSubscriptions.create	{ clientId: UUID; planId: UUID; startDate: string; endDate?: string }
+clientSubscriptions.update	{ id: UUID; startDate?: string; endDate?: string }
+clientSubscriptions.delete	{ id: UUID }
+
+invoices
+Procedure	Input
+invoices.getAll	{ clientId: UUID }
+invoices.getById	{ id: UUID }
+invoices.create	{ clientId: UUID; invoiceDate: string; dueDate?: string; paymentMethod?: string; contractStart?: string; contractEnd?: string; itdBilled: number; creditsApplied?: number }
+invoices.update	{ id: UUID; …any of above fields… }
+invoices.delete	{ id: UUID }
+
+🔄 Workflows & Executions
+workflows
+Procedure	Input
+workflows.getAll	{ clientId: UUID; departmentId?: UUID }
+workflows.getById	{ id: UUID }
+workflows.create	{ clientId: UUID; departmentId?: UUID; name: string; description?: string; timeSavedPerExec?: string; costSavedPerExec?: number }
+workflows.update	{ id: UUID; …any of above fields… }
+workflows.delete	{ id: UUID }
+
+nodes
+Procedure	Input
+nodes.getAll	{ workflowId: UUID }
+nodes.getById	{ id: UUID }
+nodes.create	{ workflowId: UUID; name: string; nodeType: string; settings: JSON }
+nodes.update	{ id: UUID; name?: string; nodeType?: string; settings?: JSON }
+nodes.delete	{ id: UUID }
+
+executions
+Procedure	Input
+executions.getAll	{ workflowId: UUID; from?: string; to?: string }
+executions.getById	{ id: UUID }
+executions.create	{ workflowId: UUID; succeeded: boolean; timeTaken?: string; costSaved?: number }
+executions.update	{ id: UUID; succeeded?: boolean; timeTaken?: string; costSaved?: number }
+
+exceptions
+Procedure	Input
+exceptions.getAll	{ executionId: UUID }
+exceptions.getById	{ id: UUID }
+exceptions.create	{ executionId: UUID; exceptionType: string; severity: string; remedy?: string }
+exceptions.update	{ id: UUID; status?: string; severity?: string; remedy?: string }
+exceptions.delete	{ id: UUID }
+
+exceptionNotifications
+Procedure	Input
+exceptionNotifications.getAll	{ exceptionId?: UUID; userId?: UUID }
+exceptionNotifications.create	{ exceptionId: UUID; userId: UUID; method: string }
+exceptionNotifications.delete	{ id: UUID }
+
+📈 Pipeline Progress
+pipelineProgress
+Procedure	Input
+pipelineProgress.getAll	{ clientId: UUID }
+pipelineProgress.getById	{ id: UUID }
+pipelineProgress.create	{ clientId: UUID; phaseId: UUID; completedAt?: string }
+pipelineProgress.update	{ id: UUID; completedAt: string }

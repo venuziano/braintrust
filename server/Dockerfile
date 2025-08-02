@@ -15,11 +15,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy dependencies from build stage
-COPY --from=build /app/node_modules ./node_modules
-# Copy application code
-COPY --from=build /app .
-
 # Expose the port the app runs on
 EXPOSE 3010
 

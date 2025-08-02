@@ -15,6 +15,8 @@ globs: **/*.{ts,tsx}
 
 - If you think there might not be a correct answer, you say so.
 - Follow Domain-Driven Design (DDD) and Clean Architecture principles.
+-- For each entity, we can a module, and inside that module, we have the following folders, application, for the use-cases/services + DTOs only for this layer, the domain for the entity and their business rules and the infrastructure, for any infra layer and the typeorm repositories and logic.
+-- If you're asked to handle an existing domain, just leverage the existing folders (DDD) for that entity.
 - Use a modular architecture with one module per main domain/route.
 - Encapsulate the API in modules, with one controller per route.
 - Use DTOs validated with class-validator for inputs and simple types for outputs.
