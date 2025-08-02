@@ -2,14 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientSchema } from '../typeorm/client.schema';
+import { ClientRepository } from '../../domain/repositories/client.repository.interface';
+import { Client, ClientProps } from '../../domain/entities/client.entity';
 import {
   ClientMetrics,
-  GetAllClientsResponse,
-} from '../../application/dto/get-all-clients.dto';
-import { ClientRepository } from '../../domain/repositories/client.repository.interface';
-import { Client } from '../../domain/entities/client.entity';
-import { formatDuration } from 'src/shared/entities/helpers';
-// import { ClientMetrics } from '../../domain/entities/clientMetrics';
+} from '../../domain/entities/client-metrics.entity';
 
 @Injectable()
 export class TypeOrmClientRepository implements ClientRepository {
@@ -18,7 +15,7 @@ export class TypeOrmClientRepository implements ClientRepository {
     private readonly repo: Repository<ClientSchema>,
   ) {}
 
-  async findAll(): Promise<GetAllClientsResponse> {
+  async findAll(): Promise<ClientMetrics[]> {
     const raw = await this.repo
       .createQueryBuilder('client')
       .select('client.id', 'id')
@@ -39,11 +36,20 @@ export class TypeOrmClientRepository implements ClientRepository {
       .leftJoin('executions', 'exec', 'exec.workflow_id = wf.id')
       .leftJoin('exceptions', 'exception', 'exception.execution_id = exec.id')
       .groupBy('client.id')
-      .getRawMany();
+      .getRawMany<{
+        id: string;
+        name: string;
+        workflowsCount: string;
+        nodesCount: string;
+        executionsCount: string;
+        exceptionsCount: string;
+        revenue: string;
+        timeSavedInSeconds: string;
+        moneySaved: string;
+      }>();
 
-    // return raw.map((r) => this.toClientMetricsDomainEntity(r));
-    return raw.map(
-      (r): ClientMetrics => ({
+    return raw.map((r) => {
+      return ClientMetrics.fromProps({
         id: Number(r.id),
         name: r.name,
         contractStart: null,
@@ -52,10 +58,10 @@ export class TypeOrmClientRepository implements ClientRepository {
         executionsCount: Number(r.executionsCount) || 0,
         exceptionsCount: Number(r.exceptionsCount) || 0,
         revenue: parseFloat(r.revenue) || 0,
-        timeSaved: formatDuration(r.timeSavedInSeconds),
+        timeSavedInSeconds: parseFloat(r.timeSavedInSeconds) || 0,
         moneySaved: parseFloat(r.moneySaved) || 0,
-      }),
-    );
+      });
+    });
   }
 
   async findById(id: number): Promise<Client | null> {

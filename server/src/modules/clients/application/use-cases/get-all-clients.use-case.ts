@@ -13,6 +13,18 @@ export class GetAllClientsUseCase {
   ) {}
 
   async execute(): Promise<GetAllClientsResponse> {
-    return this.clientRepo.findAll();
+    const metrics = await this.clientRepo.findAll();
+    return metrics.map((m) => ({
+      id: m.toProps().id,
+      name: m.toProps().name,
+      contractStart: m.toProps().contractStart?.toString() ?? null,
+      workflowsCount: m.toProps().workflowsCount,
+      nodesCount: m.toProps().nodesCount,
+      executionsCount: m.toProps().executionsCount,
+      exceptionsCount: m.toProps().exceptionsCount,
+      revenue: m.toProps().revenue,
+      timeSaved: m.getTimeSavedFormatted(),
+      moneySaved: m.toProps().moneySaved,
+    }));
   }
 }
