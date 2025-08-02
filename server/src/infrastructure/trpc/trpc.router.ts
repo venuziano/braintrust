@@ -5,6 +5,7 @@ import { RolesController } from '../../modules/roles/roles.controller';
 import { UsersController } from 'src/modules/users/users.controller';
 import { ClientsController } from '../../modules/clients/clients.controller';
 import { WorkflowsController } from '../../modules/workflows/workflows.controller';
+import { AuthController } from '../../modules/auth/auth.controller';
 
 /**
  * Main tRPC instance
@@ -21,6 +22,7 @@ export class TrpcRouter {
     private readonly rolesController: RolesController,
     private readonly clientsController: ClientsController,
     private readonly workflowsController: WorkflowsController,
+    private readonly authController: AuthController,
   ) {}
 
   /**
@@ -32,6 +34,7 @@ export class TrpcRouter {
       roles: this.rolesController.createRouter(),
       clients: this.clientsController.createRouter(),
       workflows: this.workflowsController.createRouter(),
+      auth: this.authController.createRouter(),
     });
   }
 }

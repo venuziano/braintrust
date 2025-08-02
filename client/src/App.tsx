@@ -1,50 +1,140 @@
 import React, { useState } from 'react'
-import {
-  HomeIcon,
-  UsersIcon,
-  BriefcaseIcon,
-  CreditCardIcon,
-  RepeatIcon,
-  MessageSquare,
-  BarChart2,
-  AlertCircleIcon,
-} from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Header } from './components/Header'
-import { PageContent } from './components/PageContent'
+import { RouteComponent } from './components/RouteComponent'
+import { RouteGuard } from './components/RouteGuard'
+import { LoginPage } from './components/LoginPage'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ToastProvider } from './contexts/ToastContext'
+import { useMediaQuery } from './hooks/useMediaQuery'
+import { useRoutes } from './hooks/useRoutes'
 
-export default function App() {
-  const navItems = [
-    { key: 'Dashboard', label: 'Dashboard', icon: HomeIcon },
-    { key: 'Users', label: 'Users', icon: UsersIcon },
-    { key: 'Clients', label: 'Clients', icon: BriefcaseIcon },
-    { key: 'Billing', label: 'Billing', icon: CreditCardIcon },
-    { key: 'Subscriptions', label: 'Subscriptions', icon: RepeatIcon },
-    { key: 'Messaging', label: 'Messaging', icon: MessageSquare },
-    { key: 'Reporting', label: 'Reporting', icon: BarChart2 },
-    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon },
-  ]
+function AppContent() {
+  const { currentRoute, navItems, navigateTo, isCurrentRoute } = useRoutes()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { isAuthenticated, isLoading } = useAuth()
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
 
-  const [selected, setSelected] = useState(navItems[0].key)
-
-  return (
-    <div
-      style={{
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div style={{
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         height: '100vh',
         backgroundColor: 'var(--background)',
-        color: 'var(--foreground)',
-      }}
-    >
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            border: '3px solid var(--border)',
+            borderTop: '3px solid var(--primary)',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }} />
+          <span style={{
+            fontSize: '16px',
+            color: 'var(--muted-foreground)',
+          }}>
+            Loading...
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
+  return (
+    <RouteGuard>
+      <div
+        style={{
+          display: 'flex',
+          height: '100vh',
+          backgroundColor: 'var(--background)',
+          color: 'var(--foreground)',
+          position: 'relative',
+        }}
+      >
+      {/* Mobile Overlay */}
+      {isMobile && sidebarOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 40,
+          }}
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         style={{
-          width: '240px',
+          width: isMobile ? '280px' : isTablet ? '200px' : '240px',
           backgroundColor: 'var(--sidebar)',
           borderRight: '1px solid var(--sidebar-border)',
           display: 'flex',
           flexDirection: 'column',
+          position: isMobile ? 'fixed' : 'relative',
+          top: 0,
+          left: 0,
+          height: '100vh',
+          zIndex: 50,
+          transform: isMobile && !sidebarOpen ? 'translateX(-100%)' : 'translateX(0)',
+          transition: 'transform 0.3s ease-in-out',
         }}
       >
+        {/* Mobile Header */}
+        {isMobile && (
+          <div
+            style={{
+              padding: '16px',
+              borderBottom: '1px solid var(--sidebar-border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <h2 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: 'var(--sidebar-foreground)',
+              margin: 0,
+            }}>
+              Menu
+            </h2>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--sidebar-foreground)',
+                cursor: 'pointer',
+                padding: '4px',
+                borderRadius: 'var(--radius)',
+              }}
+            >
+              <X style={{ width: '20px', height: '20px' }} />
+            </button>
+          </div>
+        )}
+
         {/* Menu Items */}
         <nav
           style={{
@@ -58,19 +148,24 @@ export default function App() {
           {navItems.map(item => (
             <button
               key={item.key}
-              onClick={() => setSelected(item.key)}
+              onClick={() => {
+                navigateTo(item.key);
+                if (isMobile) {
+                  setSidebarOpen(false);
+                }
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                padding: selected === item.key ? '12px 16px' : '8px 16px',
-                margin: selected === item.key ? '12px 16px' : '8px 16px',
+                padding: isCurrentRoute(item.key) ? '12px 16px' : '8px 16px',
+                margin: isCurrentRoute(item.key) ? '12px 16px' : '8px 16px',
                 borderRadius: 'var(--radius)',
                 backgroundColor:
-                  selected === item.key
+                  isCurrentRoute(item.key)
                     ? 'var(--sidebar-accent)'
                     : 'transparent',
                 color:
-                  selected === item.key
+                  isCurrentRoute(item.key)
                     ? 'var(--sidebar-accent-foreground)'
                     : 'var(--sidebar-foreground)',
                 border: 'none',
@@ -80,13 +175,13 @@ export default function App() {
                 fontSize: '14px',
               }}
               onMouseEnter={(e) => {
-                if (selected !== item.key) {
+                if (!isCurrentRoute(item.key)) {
                   e.currentTarget.style.backgroundColor = 'var(--sidebar-accent)';
                   e.currentTarget.style.color = 'var(--sidebar-accent-foreground)';
                 }
               }}
               onMouseLeave={(e) => {
-                if (selected !== item.key) {
+                if (!isCurrentRoute(item.key)) {
                   e.currentTarget.style.backgroundColor = 'transparent';
                   e.currentTarget.style.color = 'var(--sidebar-foreground)';
                 }
@@ -106,31 +201,76 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
+          marginLeft: isMobile ? 0 : undefined,
         }}
       >
         {/* Header Bar */}
         <div
           style={{
-            padding: '16px 24px',
+            padding: isMobile ? '12px 16px' : '16px 24px',
             backgroundColor: 'var(--background)',
             borderBottom: '1px solid var(--border)',
           }}
         >
-          <Header title={selected} />
+          <Header 
+            title={currentRoute?.name || 'Dashboard'} 
+            onMenuClick={() => setSidebarOpen(true)}
+            showMenuButton={isMobile}
+          />
         </div>
 
         {/* Page Content Section */}
         <div
           style={{
             flex: 1,
-            padding: '24px',
+            padding: isMobile ? '16px' : '24px',
             backgroundColor: 'var(--background)',
             color: 'var(--foreground)',
+            overflow: 'auto',
           }}
         >
-          <PageContent title={selected} />
+          {/* Route Component Rendering */}
+          {currentRoute ? (
+            <RouteComponent route={currentRoute} />
+          ) : (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              textAlign: 'center',
+            }}>
+              <h2 style={{
+                fontSize: '24px',
+                fontWeight: '600',
+                color: 'var(--foreground)',
+                margin: '0 0 16px 0',
+              }}>
+                Page Not Found
+              </h2>
+              <p style={{
+                fontSize: '16px',
+                color: 'var(--muted-foreground)',
+                margin: 0,
+              }}>
+                The requested page is not available.
+              </p>
+            </div>
+          )}
         </div>
       </main>
-    </div>
+      </div>
+    </RouteGuard>
   )
+}
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ToastProvider>
+  );
 }

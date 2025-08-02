@@ -10,12 +10,24 @@ import { ExceptionsModule } from '../../modules/exceptions/exceptions.module';
 import { ExceptionNotificationsModule } from '../../modules/exception-notifications/exception-notifications.module';
 import { ExecutionsModule } from '../../modules/executions/executions.module';
 import { NodesModule } from '../../modules/nodes/nodes.module';
+import { AuthModule } from '../../modules/auth/auth.module';
 
 /**
  * tRPC module that exports the main router
  */
 @Module({
-  imports: [UsersModule, RolesModule, ClientsModule, DepartmentsModule, WorkflowsModule, ExceptionsModule, ExceptionNotificationsModule, ExecutionsModule, NodesModule],
+  imports: [
+    UsersModule, 
+    RolesModule, 
+    ClientsModule, 
+    DepartmentsModule, 
+    WorkflowsModule, 
+    ExceptionsModule, 
+    ExceptionNotificationsModule, 
+    ExecutionsModule, 
+    NodesModule, 
+    AuthModule
+  ],
   providers: [TrpcRouter],
   exports: [TrpcRouter],
 })

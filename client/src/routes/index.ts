@@ -1,0 +1,75 @@
+import type { NavItem } from '../components/RoleBasedNavigation';
+import {
+  HomeIcon,
+  UsersIcon,
+  BriefcaseIcon,
+  CreditCardIcon,
+  RepeatIcon,
+  MessageSquare,
+  BarChart2,
+  AlertCircleIcon,
+  TrendingUp,
+} from 'lucide-react';
+
+export interface Route {
+  name: string;
+  path: string;
+  component: string;
+  allowedRoles: string[];
+  icon?: React.ComponentType<{ style?: React.CSSProperties }>;
+}
+
+// Admin routes
+export const ADMIN_ROUTES: Route[] = [
+  { name: 'Dashboard', path: 'admin/dashboard', component: 'AdminDashboard', allowedRoles: ['Admin', 'Solutions Engineer'], icon: HomeIcon },
+  { name: 'Users', path: 'admin/users', component: 'AdminUsers', allowedRoles: ['Admin', 'Solutions Engineer'], icon: UsersIcon },
+  { name: 'Clients', path: 'admin/clients', component: 'AdminClients', allowedRoles: ['Admin', 'Solutions Engineer'], icon: BriefcaseIcon },
+  { name: 'Billing', path: 'admin/billing', component: 'AdminBilling', allowedRoles: ['Admin', 'Solutions Engineer'], icon: CreditCardIcon },
+  { name: 'Subscriptions', path: 'admin/subscriptions', component: 'AdminSubscriptions', allowedRoles: ['Admin', 'Solutions Engineer'], icon: RepeatIcon },
+  { name: 'Messaging', path: 'admin/messaging', component: 'AdminMessaging', allowedRoles: ['Admin', 'Solutions Engineer'], icon: MessageSquare },
+  { name: 'Reporting', path: 'admin/reporting', component: 'AdminReporting', allowedRoles: ['Admin', 'Solutions Engineer'], icon: BarChart2 },
+  { name: 'Exceptions', path: 'admin/exceptions', component: 'AdminExceptions', allowedRoles: ['Admin', 'Solutions Engineer'], icon: AlertCircleIcon },
+];
+
+// Client routes
+export const CLIENT_ROUTES: Route[] = [
+  { name: 'Dashboard', path: 'client/dashboard', component: 'ClientDashboard', allowedRoles: ['Client'], icon: HomeIcon },
+  { name: 'ROI', path: 'client/roi', component: 'ClientROI', allowedRoles: ['Client'], icon: TrendingUp },
+];
+
+// All routes combined
+export const ALL_ROUTES = [...ADMIN_ROUTES, ...CLIENT_ROUTES];
+
+// Route utilities
+export function getRoutesByRole(role: string): Route[] {
+  if (role === 'Admin' || role === 'Solutions Engineer') {
+    return ADMIN_ROUTES;
+  }
+  if (role === 'Client') {
+    return CLIENT_ROUTES;
+  }
+  return [];
+}
+
+export function getRouteByPath(path: string): Route | undefined {
+  return ALL_ROUTES.find(route => route.path === path);
+}
+
+export function getRouteByName(name: string): Route | undefined {
+  return ALL_ROUTES.find(route => route.name === name);
+}
+
+export function getDefaultRoute(role: string): Route | undefined {
+  const routes = getRoutesByRole(role);
+  return routes[0];
+}
+
+// Convert routes to NavItems for navigation
+export function routesToNavItems(routes: Route[]): NavItem[] {
+  return routes.map(route => ({
+    key: route.path,
+    label: route.name,
+    icon: route.icon || (() => null),
+    allowedRoles: route.allowedRoles,
+  }));
+} 

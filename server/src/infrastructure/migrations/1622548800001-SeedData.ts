@@ -25,11 +25,11 @@ export class SeedData1622548800001 implements MigrationInterface {
         ('Testing started',                10),
         ('Production deploy',              11);
 
-      -- two users
+      -- two users with MD5 hashed passwords
       INSERT INTO users (name,email,phone, password_hash) VALUES
-        ('Alice Admin','alice@braintrust.com','+1-555-0100', 'password1'),
-        ('Bob SE','bob.se@contractor.com','+1-555-0101', 'password2'),
-        ('Carol Client','carol@acme.com','+1-555-0102', 'password3');
+        ('Alice Admin','alice@braintrust.com','+1-555-0100', md5('password1')),
+        ('Bob SE','bob.se@contractor.com','+1-555-0101', md5('password2')),
+        ('Carol Client','carol@acme.com','+1-555-0102', md5('password3'));
 
       -- two clients
       INSERT INTO clients (name,url) VALUES
@@ -80,7 +80,6 @@ export class SeedData1622548800001 implements MigrationInterface {
         'Auto-task ' || gs AS description,
         '00:10:00' AS time_saved_per_exec,
         10.00 AS cost_saved_per_exec,
-        -- Generate dates spread across the last year (365 days)
         -- Use a more predictable distribution: 1-100 days ago
         CURRENT_DATE - INTERVAL '1 day' * (gs - 1) AS created_at
       FROM clients c

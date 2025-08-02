@@ -4,6 +4,7 @@ import { useTotalWorkflows } from '../api/workflows';
 import { KpiCard } from './layout/KpiCard';
 import { KpiCardSkeleton } from './layout/KpiCardSkeleton';
 import type { TimePeriod } from '../../../server/src/modules/workflows/application/dto/get-total-workflows-kpi.dto';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface PageContentProps {
   title: string;
@@ -27,12 +28,16 @@ function TimePeriodFilters({
   selectedTimePeriod: TimePeriod; 
   onTimePeriodChange: (period: TimePeriod) => void; 
 }) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   return (
     <div style={{ 
       display: 'flex', 
       gap: '8px', 
       padding: '16px 0',
-      borderBottom: '1px solid var(--border)'
+      borderBottom: '1px solid var(--border)',
+      flexWrap: isMobile ? 'wrap' : 'nowrap',
+      overflowX: isMobile ? 'auto' : 'visible',
     }}>
       {TIME_PERIOD_OPTIONS.map((option) => (
         <button
@@ -48,6 +53,8 @@ function TimePeriodFilters({
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}
           onMouseEnter={(e) => {
             if (selectedTimePeriod !== option.value) {
@@ -71,11 +78,13 @@ function TimePeriodFilters({
 function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) {
   const { data: workflowsData, isLoading, error } = useTotalWorkflows(selectedTimePeriod);
 
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   if (isLoading) {
     return (
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
         <KpiCardSkeleton />
@@ -87,7 +96,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     return (
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
         <div style={{ 
@@ -107,7 +116,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     return (
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
         <div style={{ 
@@ -126,7 +135,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
   return (
     <div style={{ 
       display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+      gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
       gap: '16px' 
     }}>
       <KpiCard
@@ -142,6 +151,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
 // Clients Table Component
 function ClientsTable() {
   const { data: clientsData, isLoading, error } = useClients();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   if (isLoading) {
     return (
@@ -194,9 +204,15 @@ function ClientsTable() {
   return (
     <>
       {/* Card Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '12px' : '0',
+        alignItems: isMobile ? 'stretch' : 'center',
+      }}>
         <h2 style={{ 
-          fontSize: '20px', 
+          fontSize: isMobile ? '18px' : '20px', 
           fontWeight: '600', 
           color: 'var(--foreground)', 
           margin: 0 
