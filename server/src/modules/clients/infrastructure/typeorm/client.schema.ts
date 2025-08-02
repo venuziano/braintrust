@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { DepartmentSchema } from "../../../departments/infrastructure/typeorm/department.schema";
+import { WorkflowSchema } from "../../../workflows/infrastructure/typeorm/workflow.schema";
 
 @Entity("clients")
 export class ClientSchema {
@@ -10,4 +12,10 @@ export class ClientSchema {
 
   @Column({ nullable: true })
   url: string | null;
+  
+  @OneToMany(() => DepartmentSchema, department => department.client)
+  departments: DepartmentSchema[];
+
+  @OneToMany(() => WorkflowSchema, workflow => workflow.client)
+  workflows: WorkflowSchema[];
 } 

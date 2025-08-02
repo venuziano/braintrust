@@ -13,14 +13,14 @@ export class TypeOrmDepartmentRepository implements DepartmentRepository {
   ) {}
 
   async findAll(): Promise<Department[]> {
-    const schemas = await this.repo.find();
+    const schemas = await this.repo.find({ relations: ['client'] });
     return schemas.map(
-      s => new Department({ id: s.id, clientId: s.client_id, name: s.name }),
+      s => new Department({ id: s.id, clientId: s.client.id, name: s.name }),
     );
   }
 
   async findById(id: number): Promise<Department | null> {
-    const s = await this.repo.findOne({ where: { id } });
-    return s ? new Department({ id: s.id, clientId: s.client_id, name: s.name }) : null;
+    const s = await this.repo.findOne({ where: { id }, relations: ['client'] });
+    return s ? new Department({ id: s.id, clientId: s.client.id, name: s.name }) : null;
   }
 } 
