@@ -1,16 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { initTRPC } from '@trpc/server';
-import superjson from 'superjson';
 import { RolesController } from '../../modules/roles/roles.controller';
 import { UsersController } from 'src/modules/users/users.controller';
 import { ClientsController } from '../../modules/clients/clients.controller';
 import { WorkflowsController } from '../../modules/workflows/workflows.controller';
 import { AuthController } from '../../modules/auth/auth.controller';
-
-/**
- * Main tRPC instance
- */
-const t = initTRPC.create({ transformer: superjson });
+import { t } from './trpc.shared';
 
 /**
  * Main tRPC router that combines all domain routers

@@ -11,6 +11,12 @@ export function createTrpcClient() {
       httpBatchLink({
         url: 'http://localhost:3010/trpc',
         transformer: superjson,
+        headers: () => {
+          const token = localStorage.getItem('token');
+          return {
+            authorization: token ? `Bearer ${token}` : '',
+          };
+        },
       }),
     ],
   });

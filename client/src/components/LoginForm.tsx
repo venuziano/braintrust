@@ -25,7 +25,7 @@ export function LoginForm() {
     e.preventDefault();
     try {
       const result = await loginApi({ email, password });
-      console.log('Login successful:', result);
+      
       authLogin(result.user, result.token);
       showSuccess(`Welcome back, ${result.user.name}!`);
       

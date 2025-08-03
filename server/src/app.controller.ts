@@ -13,7 +13,7 @@ export class AppController {
 
     const handler = createExpressMiddleware({
       router,
-      createContext: () => ({}),
+      createContext: ({ req, res }) => ({ req, res }),
       onError: ({ error, path }) => {
         console.error(`❌ tRPC failed on ${path}: ${error}`);
       },

@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { initTRPC } from '@trpc/server';
 import { ClientsService } from './clients.service';
 import { GetAllClientsResponseSchema } from './application/dto/get-all-clients.dto';
-
-const t = initTRPC.create();
+import { t } from '../../infrastructure/trpc/trpc.shared';
 
 @Injectable()
 export class ClientsController {

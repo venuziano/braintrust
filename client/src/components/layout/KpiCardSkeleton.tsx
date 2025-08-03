@@ -61,7 +61,7 @@ export function KpiCardSkeleton() {
 
       {/* big number skeleton */}
       <div style={{
-        marginTop: '1rem',
+        marginTop: '2rem',
         fontSize: '2.25rem',
         fontWeight: '700',
       }}>

@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { initTRPC } from '@trpc/server';
 import { UsersService } from './users.service';
 import { GetAllUsersResponseSchema } from './application/dto/get-all-users.dto';
-
-/**
- * tRPC instance for users router
- */
-const t = initTRPC.create();
+import { t } from '../../infrastructure/trpc/trpc.shared';
 
 /**
  * Users controller with tRPC procedures

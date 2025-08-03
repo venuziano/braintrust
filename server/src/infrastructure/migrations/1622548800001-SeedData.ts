@@ -36,6 +36,12 @@ export class SeedData1622548800001 implements MigrationInterface {
         ('Acme Corp','https://acme.example.com'),
         ('Globex Inc','https://globex.example.com');
 
+      INSERT INTO clients (name, url)
+        SELECT
+          'Client ' || i AS name,
+          'https://client' || i || '.example.com' AS url
+        FROM generate_series(1,20) AS s(i);
+
       -- departments for Acme
       INSERT INTO departments (client_id,name)
         SELECT id,'Sales' FROM clients WHERE name='Acme Corp'

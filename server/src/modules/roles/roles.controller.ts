@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { initTRPC } from '@trpc/server';
 import { GetAllRolesUseCase } from './application/use-cases/get-all-roles.use-case';
 import { GetAllRolesResponseSchema } from './application/dto/get-all-roles.dto';
-
-const t = initTRPC.create();
+import { t } from '../../infrastructure/trpc/trpc.shared';
 
 @Injectable()
 export class RolesController {

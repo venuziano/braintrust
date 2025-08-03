@@ -98,10 +98,6 @@ export class TypeOrmWorkflowRepository implements WorkflowRepository {
     const endDate = new Date(now);
     endDate.setHours(23, 59, 59, 999);
 
-    console.log(`Time period: ${timePeriod}`);
-    console.log(`Current period: ${currentStartDate.toISOString()} to ${endDate.toISOString()}`);
-    console.log(`Previous period: ${previousStartDate.toISOString()} to ${currentStartDate.toISOString()}`);
-
     const currentCount = await this.repo.count({
       where: {
         created_at: Between(currentStartDate, endDate),
@@ -113,8 +109,6 @@ export class TypeOrmWorkflowRepository implements WorkflowRepository {
         created_at: Between(previousStartDate, currentStartDate),
       },
     });
-
-    console.log(`Current count: ${currentCount}, Previous count: ${previousCount}`);
 
     return { currentCount, previousCount };
   }

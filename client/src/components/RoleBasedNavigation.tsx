@@ -24,18 +24,18 @@ export function useNavigationItems() {
 
   const allNavItems: NavItem[] = [
     // Admin-only items
-    { key: 'Dashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Users', label: 'Users', icon: UsersIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Clients', label: 'Clients', icon: BriefcaseIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Billing', label: 'Billing', icon: CreditCardIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Subscriptions', label: 'Subscriptions', icon: RepeatIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Messaging', label: 'Messaging', icon: MessageSquare, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Reporting', label: 'Reporting', icon: BarChart2, allowedRoles: ['Admin', 'Solutions Engineer'] },
-    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon, allowedRoles: ['Admin', 'Solutions Engineer'] },
+    { key: 'Dashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Admin'] },
+    { key: 'Users', label: 'Users', icon: UsersIcon, allowedRoles: ['Admin'] },
+    { key: 'Clients', label: 'Clients', icon: BriefcaseIcon, allowedRoles: ['Admin'] },
+    { key: 'Billing', label: 'Billing', icon: CreditCardIcon, allowedRoles: ['Admin'] },
+    { key: 'Subscriptions', label: 'Subscriptions', icon: RepeatIcon, allowedRoles: ['Admin'] },
+    { key: 'Messaging', label: 'Messaging', icon: MessageSquare, allowedRoles: ['Admin'] },
+    { key: 'Reporting', label: 'Reporting', icon: BarChart2, allowedRoles: ['Admin'] },
+    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon, allowedRoles: ['Admin'] },
     
     // Client-only items
-    { key: 'ClientDashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Client'] },
-    { key: 'ROI', label: 'ROI', icon: TrendingUp, allowedRoles: ['Client'] },
+    { key: 'ClientDashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'ROI', label: 'ROI', icon: TrendingUp, allowedRoles: ['Client', 'Solutions Engineer'] },
   ];
 
   // Filter navigation items based on user role
