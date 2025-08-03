@@ -1,11 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { BaseSchema } from "../../../../shared/entities/base.schema";
 import { ExecutionSchema } from "../../../executions/infrastructure/typeorm/execution.schema";
 import { ExceptionNotificationSchema } from "../../../exception-notifications/infrastructure/typeorm/exception-notification.schema";
 
 @Entity("exceptions")
-export class ExceptionSchema {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class ExceptionSchema extends BaseSchema {
 
   @ManyToOne(() => ExecutionSchema, execution => execution.exceptions)
   @JoinColumn({ name: "execution_id" })
