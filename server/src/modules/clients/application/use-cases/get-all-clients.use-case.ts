@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { GetAllClientsResponse } from '../dto/get-all-clients.dto';
+import { GetAllClientsRequest, GetAllClientsResponse } from '../dto/get-all-clients.dto';
 import {
   CLIENT_REPOSITORY_TOKEN,
   ClientRepository,
@@ -12,9 +12,10 @@ export class GetAllClientsUseCase {
     private readonly clientRepo: ClientRepository,
   ) {}
 
-  async execute(): Promise<GetAllClientsResponse> {
-    const metrics = await this.clientRepo.findAll();
-    return metrics.map((m) => ({
+  async execute(request: GetAllClientsRequest): Promise<GetAllClientsResponse> {
+    const result = await this.clientRepo.findAll(request);
+    
+    const items = result.items.map((m) => ({
       id: m.toProps().id,
       name: m.toProps().name,
       contractStart: m.toProps().contractStart?.toString() ?? 'Aug 02, 2025',
@@ -26,5 +27,10 @@ export class GetAllClientsUseCase {
       timeSaved: m.getTimeSavedFormatted(),
       moneySaved: m.toProps().moneySaved,
     }));
+
+    return {
+      items,
+      pagination: result.pagination,
+    };
   }
 }

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useClients } from '../api/clients';
 import { useTotalWorkflows } from '../api/workflows';
-import { KpiCard } from './layout/KpiCard';
-import { KpiCardSkeleton } from './layout/KpiCardSkeleton';
+import { KpiCard } from './ui/KpiCard';
+import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
+import { Pagination } from './ui/Pagination';
 import type { TimePeriod } from '../../../server/src/modules/workflows/application/dto/get-total-workflows-kpi.dto';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
@@ -148,10 +149,71 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
   );
 }
 
-// Clients Table Component
-function ClientsTable() {
-  const { data: clientsData, isLoading, error } = useClients();
+// Clients Table Header Component (Static)
+function ClientsTableHeader() {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      flexDirection: isMobile ? 'column' : 'row',
+      gap: isMobile ? '12px' : '0',
+      alignItems: isMobile ? 'stretch' : 'center',
+    }}>
+      <h2 style={{ 
+        fontSize: isMobile ? '18px' : '20px', 
+        fontWeight: '600', 
+        color: 'var(--foreground)', 
+        margin: 0 
+      }}>
+        All Clients
+      </h2>
+      <button style={{
+        backgroundColor: 'var(--primary)',
+        color: 'var(--primary-foreground)',
+        padding: '8px 16px',
+        borderRadius: 'var(--radius)',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: '500',
+        transition: 'opacity 0.2s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.opacity = '0.9';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.opacity = '1';
+      }}
+      >
+        + Add Client
+      </button>
+    </div>
+  );
+}
+
+// Clients Table Content Component (Dynamic)
+function ClientsTableContent() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: clientsData, isLoading, error } = useClients(currentPage, 10);
+
+  // Memoize the table headers to prevent re-rendering
+  const tableHeaders = useMemo(() => (
+    <thead>
+      <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--border)' }}>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Client Name</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Contract Start</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Workflows</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Nodes</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Executions</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Exceptions</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Revenue</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Time Saved</th>
+        <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Money Saved</th>
+      </tr>
+    </thead>
+  ), []); // Empty dependency array means this will never re-render
 
   if (isLoading) {
     return (
@@ -203,44 +265,6 @@ function ClientsTable() {
 
   return (
     <>
-      {/* Card Header */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        flexDirection: isMobile ? 'column' : 'row',
-        gap: isMobile ? '12px' : '0',
-        alignItems: isMobile ? 'stretch' : 'center',
-      }}>
-        <h2 style={{ 
-          fontSize: isMobile ? '18px' : '20px', 
-          fontWeight: '600', 
-          color: 'var(--foreground)', 
-          margin: 0 
-        }}>
-          All Clients
-        </h2>
-        <button style={{
-          backgroundColor: 'var(--primary)',
-          color: 'var(--primary-foreground)',
-          padding: '8px 16px',
-          borderRadius: 'var(--radius)',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: '500',
-          transition: 'opacity 0.2s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.opacity = '0.9';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.opacity = '1';
-        }}
-        >
-          + Add Client
-        </button>
-      </div>
-
       {/* Card Table */}
       <div style={{
         backgroundColor: 'var(--card)',
@@ -253,21 +277,9 @@ function ClientsTable() {
         border: '1px solid var(--border)',
       }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
-          <thead>
-            <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--border)' }}>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Client Name</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Contract Start</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Workflows</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Nodes</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Executions</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Exceptions</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Revenue</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Time Saved</th>
-              <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Money Saved</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientsData.map(c => (
+          {tableHeaders}
+          <tbody key={`table-body-${currentPage}`}>
+            {clientsData?.items?.map(c => (
               <tr
                 key={c.id}
                 style={{ 
@@ -312,6 +324,33 @@ function ClientsTable() {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      <div style={{ 
+        textAlign: 'center', 
+        marginTop: '16px', 
+        color: 'var(--muted-foreground)',
+        fontSize: '14px'
+      }}>
+        Showing {clientsData.items.length} of {clientsData.pagination.total} clients
+      </div>
+      <Pagination
+        currentPage={clientsData.pagination.page}
+        totalPages={clientsData.pagination.totalPages}
+        hasNext={clientsData.pagination.hasNext}
+        hasPrev={clientsData.pagination.hasPrev}
+        onPageChange={setCurrentPage}
+      />
+    </>
+  );
+}
+
+// Clients Table Component (Main container)
+function ClientsTable() {
+  return (
+    <>
+      <ClientsTableHeader />
+      <ClientsTableContent />
     </>
   );
 }

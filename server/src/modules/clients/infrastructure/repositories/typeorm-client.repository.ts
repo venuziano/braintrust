@@ -7,6 +7,7 @@ import { Client, ClientProps } from '../../domain/entities/client.entity';
 import {
   ClientMetrics,
 } from '../../domain/entities/client-metrics.entity';
+import { PaginationRequest, PaginationResponse, calculatePagination } from '../../../../shared/dto/pagination.dto';
 
 @Injectable()
 export class TypeOrmClientRepository implements ClientRepository {
@@ -15,7 +16,30 @@ export class TypeOrmClientRepository implements ClientRepository {
     private readonly repo: Repository<ClientSchema>,
   ) {}
 
-  async findAll(): Promise<ClientMetrics[]> {
+  async findAll(request: PaginationRequest): Promise<PaginationResponse<ClientMetrics>> {
+    // First, get the total count of clients
+    const totalCount = await this.repo
+      .createQueryBuilder('client')
+      .getCount();
+
+    // Get paginated client IDs first
+    const clientIds = await this.repo
+      .createQueryBuilder('client')
+      .select('client.id', 'id')
+      .skip((request.page - 1) * request.limit)
+      .take(request.limit)
+      .getRawMany<{ id: string }>();
+    
+    console.log('clientIds', clientIds);
+
+    if (clientIds.length === 0) {
+      return {
+        items: [],
+        pagination: calculatePagination(request.page, request.limit, totalCount),
+      };
+    }
+
+    // Then get the detailed metrics for these specific clients
     const raw = await this.repo
       .createQueryBuilder('client')
       .select('client.id', 'id')
@@ -35,6 +59,7 @@ export class TypeOrmClientRepository implements ClientRepository {
       .leftJoin('nodes', 'node', 'node.workflow_id = wf.id')
       .leftJoin('executions', 'exec', 'exec.workflow_id = wf.id')
       .leftJoin('exceptions', 'exception', 'exception.execution_id = exec.id')
+      .where('client.id IN (:...clientIds)', { clientIds: clientIds.map(c => c.id) })
       .groupBy('client.id')
       .getRawMany<{
         id: string;
@@ -48,7 +73,7 @@ export class TypeOrmClientRepository implements ClientRepository {
         moneySaved: string;
       }>();
 
-    return raw.map((r) => {
+    const items = raw.map((r) => {
       return ClientMetrics.fromProps({
         id: Number(r.id),
         name: r.name,
@@ -62,6 +87,18 @@ export class TypeOrmClientRepository implements ClientRepository {
         moneySaved: parseFloat(r.moneySaved) || 0,
       });
     });
+
+    const result = {
+      items,
+      pagination: calculatePagination(request.page, request.limit, totalCount),
+    };
+    
+    console.log('final result', {
+      itemsCount: result.items.length,
+      pagination: result.pagination
+    });
+    
+    return result;
   }
 
   async findById(id: number): Promise<Client | null> {

@@ -1,8 +1,8 @@
 import { trpc } from '../utils/trpc';
 
-// hook to get all clients
-export function useClients() {
-  return trpc.clients.getAll.useQuery();
+// hook to get all clients with pagination
+export function useClients(page: number = 1, limit: number = 10) {
+  return trpc.clients.getAll.useQuery({ page, limit });
 }
 
 // hook to get one client by ID

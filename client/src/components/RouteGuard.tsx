@@ -7,9 +7,14 @@ interface RouteGuardProps {
 }
 
 export function RouteGuard({ children }: RouteGuardProps) {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   React.useEffect(() => {
+    // Don't do any routing logic while still loading authentication state
+    if (isLoading) {
+      return;
+    }
+
     if (isAuthenticated && user) {
       const currentPath = window.location.pathname.slice(1);
       
@@ -43,7 +48,7 @@ export function RouteGuard({ children }: RouteGuardProps) {
         }
       }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, isLoading]);
 
   return <>{children}</>;
 } 

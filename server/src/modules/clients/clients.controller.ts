@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClientsService } from './clients.service';
-import { GetAllClientsResponseSchema } from './application/dto/get-all-clients.dto';
+import { GetAllClientsRequestSchema, GetAllClientsResponseSchema } from './application/dto/get-all-clients.dto';
 import { t } from '../../infrastructure/trpc/trpc.shared';
 
 @Injectable()
@@ -10,8 +10,9 @@ export class ClientsController {
   createRouter() {
     return t.router({
       getAll: t.procedure
+        .input(GetAllClientsRequestSchema)
         .output(GetAllClientsResponseSchema)
-        .query(() => this.clientsService.getAllClients()),
+        .query(({ input }) => this.clientsService.getAllClients(input)),
     });
   }
 }

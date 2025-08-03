@@ -16,8 +16,8 @@ function AppContent() {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const isTablet = useMediaQuery('(max-width: 1024px)')
 
-  // Show loading state while checking authentication
-  if (isLoading) {
+  // Show loading state while checking authentication or initializing routes
+  if (isLoading || !currentRoute) {
     return (
       <div style={{
         display: 'flex',

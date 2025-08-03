@@ -9,7 +9,7 @@ import {
 } from '../routes';
 
 export function useRoutes() {
-  const { user, isAdmin, isClient } = useAuth();
+  const { user, isAdmin, isClient, isLoading } = useAuth();
   const [currentRoute, setCurrentRoute] = useState<Route | null>(null);
   const [navItems, setNavItems] = useState<any[]>([]);
 
@@ -42,6 +42,11 @@ export function useRoutes() {
 
   // Initialize route from URL or set default
   useEffect(() => {
+    // Don't initialize routes while still loading authentication state
+    if (isLoading) {
+      return;
+    }
+
     if (user) {
       const routes = getRoutesByRole(user.role);
       const navItemsFromRoutes = routesToNavItems(routes);
@@ -69,7 +74,7 @@ export function useRoutes() {
 
       setCurrentRoute(route);
     }
-  }, [user]);
+  }, [user, isLoading]);
 
   // Navigation functions
   const navigateTo = (path: string) => {
