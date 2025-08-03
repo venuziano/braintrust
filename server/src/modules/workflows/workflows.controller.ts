@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { GetTotalWorkflowsKpiUseCase } from './application/use-cases/get-total-workflows-kpi.use-case';
+import { GetTotalRevenueKpiUseCase } from './application/use-cases/get-total-revenue-kpi.use-case';
 import { KpiRequestSchema, KpiResponseSchema } from '../../shared/dto/kpi.dto';
 import { createProtectedProcedure } from '../../infrastructure/trpc/trpc.middleware';
 import { t } from '../../infrastructure/trpc/trpc.shared';
@@ -9,6 +10,7 @@ import { t } from '../../infrastructure/trpc/trpc.shared';
 export class WorkflowsController {
   constructor(
     private readonly getTotalWorkflowsKpiUseCase: GetTotalWorkflowsKpiUseCase,
+    private readonly getTotalRevenueKpiUseCase: GetTotalRevenueKpiUseCase,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -20,6 +22,10 @@ export class WorkflowsController {
         .input(KpiRequestSchema)
         .output(KpiResponseSchema)
         .query(({ input }) => this.getTotalWorkflowsKpiUseCase.execute(input)),
+      getTotalRevenueKpi: protectedProcedure.admin(this.jwtService)
+        .input(KpiRequestSchema)
+        .output(KpiResponseSchema)
+        .query(({ input }) => this.getTotalRevenueKpiUseCase.execute(input)),
     });
   }
 }

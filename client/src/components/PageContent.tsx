@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useClients } from '../api/clients';
-import { useTotalWorkflows } from '../api/workflows';
+import { useTotalWorkflows, useTotalRevenue } from '../api/workflows';
 import { useTotalExceptions } from '../api/exceptions';
 import { useTotalTimeSaved } from '../api/executions';
 import { KpiCard } from './ui/KpiCard';
@@ -82,10 +82,11 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
   const { data: workflowsData, isLoading: workflowsLoading, error: workflowsError } = useTotalWorkflows(selectedTimePeriod);
   const { data: exceptionsData, isLoading: exceptionsLoading, error: exceptionsError } = useTotalExceptions(selectedTimePeriod);
   const { data: timeSavedData, isLoading: timeSavedLoading, error: timeSavedError } = useTotalTimeSaved(selectedTimePeriod);
+  const { data: revenueData, isLoading: revenueLoading, error: revenueError } = useTotalRevenue(selectedTimePeriod);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const isLoading = workflowsLoading || exceptionsLoading || timeSavedLoading;
-  const error = workflowsError || exceptionsError || timeSavedError;
+  const isLoading = workflowsLoading || exceptionsLoading || timeSavedLoading || revenueLoading;
+  const error = workflowsError || exceptionsError || timeSavedError || revenueError;
   
   if (isLoading) {
     return (
@@ -94,6 +95,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
         gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
+        <KpiCardSkeleton />
         <KpiCardSkeleton />
         <KpiCardSkeleton />
         <KpiCardSkeleton />
@@ -121,7 +123,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     );
   }
 
-  if (!workflowsData || !exceptionsData || !timeSavedData) {
+  if (!workflowsData || !exceptionsData || !timeSavedData|| !revenueData) {
     return (
       <div style={{ 
         display: 'grid', 
@@ -147,6 +149,12 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
       gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
       gap: '16px' 
     }}>
+      <KpiCard
+        label={revenueData.label}
+        value={`$${revenueData.value.toLocaleString()}`}
+        changePercentage={revenueData.changePercentage}
+        changeDirection={revenueData.changeDirection}
+      />
       <KpiCard
         label={timeSavedData.label}
         value={`${timeSavedData.value}h`}

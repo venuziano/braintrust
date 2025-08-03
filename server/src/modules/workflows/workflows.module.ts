@@ -5,6 +5,7 @@ import { TypeOrmWorkflowRepository } from './infrastructure/repositories/typeorm
 import { WorkflowsController } from './workflows.controller';
 import { GetTotalWorkflowsKpiUseCase } from './application/use-cases/get-total-workflows-kpi.use-case';
 import { WORKFLOW_REPOSITORY_TOKEN } from './domain/repositories/workflow.repository.interface';
+import { GetTotalRevenueKpiUseCase } from './application/use-cases/get-total-revenue-kpi.use-case';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WORKFLOW_REPOSITORY_TOKEN } from './domain/repositories/workflow.reposi
       useClass: TypeOrmWorkflowRepository,
     },
     GetTotalWorkflowsKpiUseCase,
+    GetTotalRevenueKpiUseCase,
     WorkflowsController,
   ],
   exports: [WORKFLOW_REPOSITORY_TOKEN, WorkflowsController],

@@ -12,3 +12,15 @@ export function useTotalWorkflows(
     { timePeriod },
   );
 }
+
+/**
+ * Fetches the total revenue KPI for the given time period.
+ * Defaults to "itd" if no period is provided.
+ */
+export function useTotalRevenue(
+  timePeriod: TimePeriod = 'itd',
+) {
+  return trpc.workflows.getTotalRevenueKpi.useQuery(
+    { timePeriod },
+  );
+}

@@ -63,4 +63,39 @@ export class TypeOrmWorkflowRepository implements WorkflowRepository {
 
     return { currentCount, previousCount };
   }
+
+  async getRevenueKpi(timePeriod: TimePeriod): Promise<{
+    currentCount: number;
+    previousCount: number;
+  }> {
+    const { currentStartDate, currentEndDate, previousStartDate, previousEndDate } = 
+      DateCalculator.calculateDateRanges(timePeriod);
+
+    // Get current period revenue
+    const currentResult = await this.repo
+      .createQueryBuilder('wf')
+      .select('SUM(wf.cost_saved_per_exec)', 'totalRevenue')
+      .where('wf.cost_saved_per_exec IS NOT NULL')
+      .andWhere('wf.created_at BETWEEN :startDate AND :endDate', {
+        startDate: currentStartDate,
+        endDate: currentEndDate,
+      })
+      .getRawOne<{ totalRevenue: string }>();
+
+    // Get previous period revenue
+    const previousResult = await this.repo
+      .createQueryBuilder('wf')
+      .select('SUM(wf.cost_saved_per_exec)', 'totalRevenue')
+      .where('wf.cost_saved_per_exec IS NOT NULL')
+      .andWhere('wf.created_at BETWEEN :startDate AND :endDate', {
+        startDate: previousStartDate,
+        endDate: previousEndDate,
+      })
+      .getRawOne<{ totalRevenue: string }>();
+
+    const currentCount = parseFloat(currentResult?.totalRevenue || '0');
+    const previousCount = parseFloat(previousResult?.totalRevenue || '0');
+
+    return { currentCount, previousCount };
+  }
 } 
