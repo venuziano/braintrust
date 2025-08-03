@@ -42,6 +42,26 @@ export class CreateSchema1622548800000 implements MigrationInterface {
         "deleted_at" TIMESTAMP,
         CONSTRAINT "PK_b7d3f9b1b1b1b1b1b1b1b1b1b1b" PRIMARY KEY ("id")
       );
+      CREATE TYPE pipeline_phase_status AS ENUM (
+        'not_started',
+        'in_progress',
+        'completed'
+      );
+      CREATE TABLE client_pipeline_progress (
+        client_id         INTEGER               NOT NULL
+          REFERENCES clients(id)
+          ON DELETE CASCADE,
+        pipeline_phase_id INTEGER               NOT NULL
+          REFERENCES pipeline_phases(id)
+          ON DELETE CASCADE,
+        status            pipeline_phase_status NOT NULL
+          DEFAULT 'not_started',
+        completed_at      TIMESTAMPTZ            NULL,  -- set when status = 'completed'
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
+        "deleted_at" TIMESTAMP,
+        PRIMARY KEY (client_id, pipeline_phase_id)
+      );
       CREATE TABLE "departments" (
         "id" SERIAL NOT NULL,
         "client_id" integer NOT NULL,
@@ -157,6 +177,7 @@ export class CreateSchema1622548800000 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
+      DROP TABLE "client_pipeline_progress";
       DROP TABLE "exception_notifications";
       DROP TABLE "exceptions";
       DROP TABLE "executions";
