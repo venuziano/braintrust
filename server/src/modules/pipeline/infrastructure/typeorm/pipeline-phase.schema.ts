@@ -6,7 +6,7 @@ export class PipelinePhaseSchema extends BaseSchema {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ name: 'phase_order' })
   order: number;
 
   @Column({ type: 'text', nullable: true })

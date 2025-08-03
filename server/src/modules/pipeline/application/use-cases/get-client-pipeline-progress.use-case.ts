@@ -11,7 +11,7 @@ export class GetClientPipelineProgressUseCase {
 
   async execute(clientId: number): Promise<GetClientPipelineProgressResponse> {
     const pipelineProgress = await this.pipelineProgressRepo.getClientPipelineProgress(clientId);
-    
+
     return {
       clientId,
       pipelineProgress: pipelineProgress.map(progress => ({

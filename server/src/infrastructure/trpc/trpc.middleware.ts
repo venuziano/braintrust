@@ -37,7 +37,7 @@ export const createAuthMiddleware = (jwtService: JwtService) => {
           id: payload.sub, name: payload.name,
           email: payload.email,
           role: payload.role,
-          clientId: payload.clientId || payload.userId, // Handle both token structures
+          clientId: payload.sub || payload.userId
         },
       };
 

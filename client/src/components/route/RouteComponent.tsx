@@ -1,6 +1,6 @@
 import React from 'react';
 import { AdminDashboard } from '../admin/AdminDashboard';
-import { ClientDashboard } from '../client/ClientDashboard';
+import { ClientDashboard } from '../client/ClientDashboard/ClientDashboard';
 import type { Route } from '../../routes';
 import { AdminUsers } from '../admin/AdminUsers';
 import { AdminClients } from '../admin/AdminClients';

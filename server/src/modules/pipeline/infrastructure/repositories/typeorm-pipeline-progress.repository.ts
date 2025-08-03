@@ -15,18 +15,33 @@ export class TypeOrmPipelineProgressRepository implements PipelineProgressReposi
   async getClientPipelineProgress(clientId: number): Promise<PipelineProgress[]> {
     const results = await this.repo
       .createQueryBuilder('progress')
-      .leftJoinAndSelect('progress.pipelinePhase', 'phase')
+      .leftJoin('progress.pipelinePhase', 'phase')
+      .select([
+        'progress.client_id',
+        'progress.pipeline_phase_id',
+        'progress.status',
+        'progress.completed_at',
+        'phase.name',
+        'phase.phase_order'
+      ])
       .where('progress.client_id = :clientId', { clientId })
-      .orderBy('phase.order', 'ASC')
-      .getMany();
+      .orderBy('phase.phase_order', 'ASC')
+      .getRawMany<{
+        progress_client_id: number;
+        progress_pipeline_phase_id: number;
+        progress_status: 'not_started' | 'in_progress' | 'completed';
+        progress_completed_at: Date | null;
+        phase_name: string;
+        phase_order: number;
+      }>();
 
     return results.map(result => PipelineProgress.fromProps({
-      clientId: result.client_id,
-      pipelinePhaseId: result.pipeline_phase_id,
-      status: result.status,
-      completedAt: result.completed_at || undefined,
-      phaseName: result.pipelinePhase.name,
-      phaseOrder: result.pipelinePhase.order,
+      clientId: result.progress_client_id,
+      pipelinePhaseId: result.progress_pipeline_phase_id,
+      status: result.progress_status,
+      completedAt: result.progress_completed_at || undefined,
+      phaseName: result.phase_name,
+      phaseOrder: result.phase_order,
     }));
   }
 } 

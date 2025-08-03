@@ -256,7 +256,7 @@ export class SeedData1622548800001 implements MigrationInterface {
         WHERE u.name = 'Carol Client'
       ), data AS (
         SELECT
-          client_cte.client_id,
+          3,
           pp.id                           AS pipeline_phase_id,
           -- statuses: first 3 completed, 4th in_progress, rest not_started
           CASE

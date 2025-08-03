@@ -48,6 +48,7 @@ export class CreateSchema1622548800000 implements MigrationInterface {
         'completed'
       );
       CREATE TABLE client_pipeline_progress (
+        "id" SERIAL NOT NULL,
         client_id         INTEGER               NOT NULL
           REFERENCES clients(id)
           ON DELETE CASCADE,
