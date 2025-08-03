@@ -65,6 +65,7 @@ export function UserProfile() {
             fontWeight: '700',
             color: 'var(--foreground)',
             margin: 0,
+            textAlign: 'center'
           }}>
             John Smith
           </h3>
