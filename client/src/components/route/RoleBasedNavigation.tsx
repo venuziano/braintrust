@@ -10,7 +10,7 @@ import {
   AlertCircleIcon,
   TrendingUp,
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 export interface NavItem {
   key: string;

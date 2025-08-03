@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { BellIcon, UserIcon, Menu } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../../contexts/AuthContext'
 
 interface HeaderProps {
   title: string

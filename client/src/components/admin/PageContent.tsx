@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { useTotalWorkflows, useTotalRevenue } from '../api/workflows';
-import { useTotalExceptions } from '../api/exceptions';
-import { useTotalTimeSaved } from '../api/executions';
-import { useTotalActiveClients } from '../api/clients';
-import { useClients } from '../api/clients';
-import type { TimePeriod } from '../../../server/src/shared/dto/kpi.dto';
-import { KpiCard } from './ui/KpiCard';
-import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
-import { Pagination } from './ui/Pagination';
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import { useTotalWorkflows, useTotalRevenue } from '../../api/workflows';
+import { useTotalExceptions } from '../../api/exceptions';
+import { useTotalTimeSaved } from '../../api/executions';
+import { useTotalActiveClients } from '../../api/clients';
+import { useClients } from '../../api/clients';
+import type { TimePeriod } from '../../../../server/src/shared/dto/kpi.dto';
+import { KpiCard } from '../shared/ui/KpiCard';
+import { KpiCardSkeleton } from '../shared/ui/KpiCardSkeleton';
+import { Pagination } from '../shared/ui/Pagination';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface PageContentProps {
   title: string;

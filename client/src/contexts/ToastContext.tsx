@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import { Toast } from '../components/ui/Toast';
-import type { ToastType } from '../components/ui/Toast';
+import { Toast } from '../components/shared/ui/Toast';
+import type { ToastType } from '../components/shared/ui/Toast';
 
 interface ToastItem {
   id: string;

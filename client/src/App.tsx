@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import { Header } from './components/Header'
-import { RouteComponent } from './components/RouteComponent'
-import { RouteGuard } from './components/RouteGuard'
-import { LoginPage } from './components/LoginPage'
+import { X } from 'lucide-react'
+import { Header } from './components/shared/layout/Header'
+import { RouteComponent } from './components/route/RouteComponent'
+import { RouteGuard } from './components/route/RouteGuard'
+import { LoginPage } from './components/shared/auth/LoginPage'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ToastProvider } from './contexts/ToastContext'
 import { useMediaQuery } from './hooks/useMediaQuery'
@@ -16,8 +16,8 @@ function AppContent() {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const isTablet = useMediaQuery('(max-width: 1024px)')
 
-  // Show loading state while checking authentication or initializing routes
-  if (isLoading || !currentRoute) {
+  // Show loading state only while checking authentication
+  if (isLoading) {
     return (
       <div style={{
         display: 'flex',
@@ -54,6 +54,41 @@ function AppContent() {
   // Show login page if not authenticated
   if (!isAuthenticated) {
     return <LoginPage />;
+  }
+
+  // Show loading state if authenticated but no route is set
+  if (!currentRoute) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        backgroundColor: 'var(--background)',
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            border: '3px solid var(--border)',
+            borderTop: '3px solid var(--primary)',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }} />
+          <span style={{
+            fontSize: '16px',
+            color: 'var(--muted-foreground)',
+          }}>
+            Loading...
+          </span>
+        </div>
+      </div>
+    );
   }
 
   return (

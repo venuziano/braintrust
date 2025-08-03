@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { useLogin } from '../api/auth';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../contexts/ToastContext';
-import { getDefaultRoute } from '../routes';
+import { useLogin } from '../../../api/auth';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useToast } from '../../../contexts/ToastContext';
+import { getDefaultRoute } from '../../../routes';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');

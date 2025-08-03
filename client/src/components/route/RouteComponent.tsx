@@ -1,8 +1,8 @@
 import React from 'react';
-import { PageContent } from './PageContent';
-import { ClientDashboard } from './ClientDashboard';
-import { ROIPage } from './ROIPage';
-import type { Route } from '../routes';
+import { PageContent } from '../admin/PageContent';
+import { ClientDashboard } from '../client/ClientDashboard';
+import { ROIPage } from '../client/ROIPage';
+import type { Route } from '../../routes';
 
 interface RouteComponentProps {
   route: Route;

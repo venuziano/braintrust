@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { getRouteByPath, getDefaultRoute } from '../routes';
+import { useAuth } from '../../contexts/AuthContext';
+import { getRouteByPath, getDefaultRoute } from '../../routes';
 
 interface RouteGuardProps {
   children: React.ReactNode;
