@@ -34,14 +34,14 @@ export const ADMIN_ROUTES: Route[] = [
 
 // Client routes
 export const CLIENT_ROUTES: Route[] = [
-  { name: 'Dashboard', path: 'client/dashboard', component: 'ClientDashboard', allowedRoles: ['Client'], icon: HomeIcon },
-  { name: 'ROI', path: 'client/roi', component: 'ClientROI', allowedRoles: ['Client'], icon: TrendingUp },
-  { name: 'Reporting', path: 'client/reporting', component: 'ClientReporting', allowedRoles: ['Client'], icon: BarChart2 },
-  { name: 'Credentials', path: 'client/credentials', component: 'ClientCredentials', allowedRoles: ['Client'], icon: KeyIcon },
-  { name: 'Exceptions', path: 'client/exceptions', component: 'ClientExceptions', allowedRoles: ['Client'], icon: AlertCircleIcon },
-  { name: 'Users', path: 'client/users', component: 'ClientUsers', allowedRoles: ['Client'], icon: UsersIcon },
-  { name: 'Billing', path: 'client/billing', component: 'ClientBilling', allowedRoles: ['Client'], icon: CreditCardIcon },
-  { name: 'Messaging', path: 'client/messaging', component: 'ClientMessaging', allowedRoles: ['Client'], icon: MessageSquare },
+  { name: 'Dashboard', path: 'client/dashboard', component: 'ClientDashboard', allowedRoles: ['Client', 'Solutions Engineer'], icon: HomeIcon },
+  { name: 'ROI', path: 'client/roi', component: 'ClientROI', allowedRoles: ['Client', 'Solutions Engineer'], icon: TrendingUp },
+  { name: 'Reporting', path: 'client/reporting', component: 'ClientReporting', allowedRoles: ['Client', 'Solutions Engineer'], icon: BarChart2 },
+  { name: 'Credentials', path: 'client/credentials', component: 'ClientCredentials', allowedRoles: ['Client', 'Solutions Engineer'], icon: KeyIcon },
+  { name: 'Exceptions', path: 'client/exceptions', component: 'ClientExceptions', allowedRoles: ['Client', 'Solutions Engineer'], icon: AlertCircleIcon },
+  { name: 'Users', path: 'client/users', component: 'ClientUsers', allowedRoles: ['Client', 'Solutions Engineer'], icon: UsersIcon },
+  { name: 'Billing', path: 'client/billing', component: 'ClientBilling', allowedRoles: ['Client', 'Solutions Engineer'], icon: CreditCardIcon },
+  { name: 'Messaging', path: 'client/messaging', component: 'ClientMessaging', allowedRoles: ['Client', 'Solutions Engineer'], icon: MessageSquare },
 ];
 
 // All routes combined

@@ -1,17 +1,6 @@
 import React from 'react';
-import {
-  HomeIcon,
-  UsersIcon,
-  BriefcaseIcon,
-  CreditCardIcon,
-  RepeatIcon,
-  MessageSquare,
-  BarChart2,
-  AlertCircleIcon,
-  TrendingUp,
-  KeyIcon,
-} from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { getRoutesByRole, routesToNavItems, type Route } from '../../routes';
 
 export interface NavItem {
   key: string;
@@ -21,40 +10,17 @@ export interface NavItem {
 }
 
 export function useNavigationItems() {
-  const { isAdmin, isClient } = useAuth();
+  const { user } = useAuth();
 
-  const allNavItems: NavItem[] = [
-    // Admin-only items
-    { key: 'Dashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Admin'] },
-    { key: 'Users', label: 'Users', icon: UsersIcon, allowedRoles: ['Admin'] },
-    { key: 'Clients', label: 'Clients', icon: BriefcaseIcon, allowedRoles: ['Admin'] },
-    { key: 'Billing', label: 'Billing', icon: CreditCardIcon, allowedRoles: ['Admin'] },
-    { key: 'Subscriptions', label: 'Subscriptions', icon: RepeatIcon, allowedRoles: ['Admin'] },
-    { key: 'Messaging', label: 'Messaging', icon: MessageSquare, allowedRoles: ['Admin'] },
-    { key: 'Reporting', label: 'Reporting', icon: BarChart2, allowedRoles: ['Admin'] },
-    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon, allowedRoles: ['Admin'] },
-    
-    // Client-only items
-    { key: 'ClientDashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'ROI', label: 'ROI', icon: TrendingUp, allowedRoles: ['Client', 'Solutions Engineer'] }, 
-    { key: 'Reporting', label: 'Reporting', icon: BarChart2, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'Credentials', label: 'Credentials', icon: KeyIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'Users', label: 'Users', icon: UsersIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'Billing', label: 'Billing', icon: CreditCardIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'Messaging', label: 'Messaging', icon: MessageSquare, allowedRoles: ['Client', 'Solutions Engineer'] },
-  ];
+  if (!user) {
+    return [];
+  }
 
-  // Filter navigation items based on user role
-  const filteredNavItems = allNavItems.filter(item => {
-    if (isAdmin) {
-      return item.allowedRoles.includes('Admin') || item.allowedRoles.includes('Solutions Engineer');
-    }
-    if (isClient) {
-      return item.allowedRoles.includes('Client');
-    }
-    return false;
-  });
+  // Get routes based on user role
+  const routes = getRoutesByRole(user.role);
+  
+  // Convert routes to navigation items
+  const navItems = routesToNavItems(routes);
 
-  return filteredNavItems;
+  return navItems;
 } 
