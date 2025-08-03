@@ -9,13 +9,16 @@ export function UserProfile() {
       boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
       border: '1px solid var(--border)',
       height: 'fit-content',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '16px',
     }}>
+      {/* Profile Picture and User Info Row */}
       <div style={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
         gap: '16px',
-        textAlign: 'center',
       }}>
         {/* Profile Picture */}
         <div style={{
@@ -28,6 +31,7 @@ export function UserProfile() {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
+          flexShrink: 0,
         }}>
           {/* Placeholder for profile image */}
           <div style={{
@@ -54,6 +58,7 @@ export function UserProfile() {
           display: 'flex',
           flexDirection: 'column',
           gap: '4px',
+          flex: 1,
         }}>
           <h3 style={{
             fontSize: 'clamp(18px, 2.5vw, 20px)',
@@ -67,12 +72,19 @@ export function UserProfile() {
             fontSize: '14px',
             color: 'var(--muted-foreground)',
             margin: 0,
+            textAlign: 'center'
           }}>
             Solutions Engineer
           </p>
         </div>
-        
-        {/* Message Button */}
+      </div>
+
+      {/* Message Button */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+      }}>
         <button style={{
           backgroundColor: 'var(--foreground)',
           color: 'var(--background)',
@@ -86,7 +98,7 @@ export function UserProfile() {
           alignItems: 'center',
           gap: '8px',
           transition: 'opacity 0.2s ease',
-          minWidth: '140px',
+          width: '100%',
           justifyContent: 'center',
         }}
         onMouseEnter={(e) => {
