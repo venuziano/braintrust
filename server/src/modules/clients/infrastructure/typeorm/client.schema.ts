@@ -1,12 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
+import { BaseSchema } from '../../../../shared/entities/base.schema';
 import { DepartmentSchema } from '../../../departments/infrastructure/typeorm/department.schema';
 import { WorkflowSchema } from '../../../workflows/infrastructure/typeorm/workflow.schema';
 
 @Entity('clients')
-export class ClientSchema {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class ClientSchema extends BaseSchema {
   @Column()
   name: string;
 

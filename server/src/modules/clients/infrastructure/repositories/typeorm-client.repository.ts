@@ -8,6 +8,8 @@ import {
   ClientMetrics,
 } from '../../domain/entities/client-metrics.entity';
 import { PaginationRequest, PaginationResponse, calculatePagination } from '../../../../shared/dto/pagination.dto';
+import { TimePeriod } from '../../../../shared/dto/kpi.dto';
+import { DateCalculator } from '../../../../shared/modules/kpi/infrastructure/utils/date-calculator.util';
 
 @Injectable()
 export class TypeOrmClientRepository implements ClientRepository {
@@ -15,6 +17,37 @@ export class TypeOrmClientRepository implements ClientRepository {
     @InjectRepository(ClientSchema)
     private readonly repo: Repository<ClientSchema>,
   ) {}
+
+  async getKpi(timePeriod: TimePeriod): Promise<{
+    currentCount: number;
+    previousCount: number;
+  }> {
+    const { currentStartDate, currentEndDate, previousStartDate, previousEndDate } =
+      DateCalculator.calculateDateRanges(timePeriod);
+
+    const currentResult = await this.repo
+      .createQueryBuilder('client')
+      .select('COUNT(client.id)', 'totalClients')
+      .where('client.created_at BETWEEN :startDate AND :endDate', {
+        startDate: currentStartDate,
+        endDate: currentEndDate,
+      })
+      .getRawOne<{ totalClients: string }>();
+
+    const previousResult = await this.repo
+      .createQueryBuilder('client')
+      .select('COUNT(client.id)', 'totalClients')
+      .where('client.created_at BETWEEN :startDate AND :endDate', {
+        startDate: previousStartDate,
+        endDate: previousEndDate,
+      })
+      .getRawOne<{ totalClients: string }>();
+
+    const currentCount = parseInt(currentResult?.totalClients || '0');
+    const previousCount = parseInt(previousResult?.totalClients || '0');
+
+    return { currentCount, previousCount };
+  }
 
   async findAll(request: PaginationRequest): Promise<PaginationResponse<ClientMetrics>> {
     // First, get the total count of clients
