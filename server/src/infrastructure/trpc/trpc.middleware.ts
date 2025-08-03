@@ -8,6 +8,7 @@ export interface AuthContext {
     name: string;
     email: string;
     role: string;
+    clientId?: number;
   };
 }
 
@@ -33,10 +34,10 @@ export const createAuthMiddleware = (jwtService: JwtService) => {
       const payload = jwtService.verify(token);
       const authContext: AuthContext = {
         user: {
-          id: payload.sub,
-          name: payload.name,
+          id: payload.sub, name: payload.name,
           email: payload.email,
           role: payload.role,
+          clientId: payload.clientId || payload.userId, // Handle both token structures
         },
       };
 
@@ -113,4 +114,4 @@ export const createProtectedProcedure = (jwtService: JwtService) => {
       return t.procedure.use(authMiddleware).use(roleMiddleware);
     },
   };
-}; 
+}

@@ -11,6 +11,7 @@ import { ExceptionNotificationsModule } from '../../modules/exception-notificati
 import { ExecutionsModule } from '../../modules/executions/executions.module';
 import { NodesModule } from '../../modules/nodes/nodes.module';
 import { AuthModule } from '../../modules/auth/auth.module';
+import { PipelineModule } from '../../modules/pipeline/pipeline.module';
 
 /**
  * tRPC module that exports the main router
@@ -26,7 +27,8 @@ import { AuthModule } from '../../modules/auth/auth.module';
     ExceptionNotificationsModule, 
     ExecutionsModule, 
     NodesModule, 
-    AuthModule
+    AuthModule,
+    PipelineModule
   ],
   providers: [TrpcRouter],
   exports: [TrpcRouter],

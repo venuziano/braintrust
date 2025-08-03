@@ -6,6 +6,7 @@ import { WorkflowsController } from '../../modules/workflows/workflows.controlle
 import { AuthController } from '../../modules/auth/auth.controller';
 import { ExceptionsController } from '../../modules/exceptions/exceptions.controller';
 import { ExecutionsController } from '../../modules/executions/executions.controller';
+import { PipelineController } from '../../modules/pipeline/pipeline.controller';
 import { t } from './trpc.shared';
 
 /**
@@ -21,6 +22,7 @@ export class TrpcRouter {
     private readonly authController: AuthController,
     private readonly exceptionsController: ExceptionsController,
     private readonly executionsController: ExecutionsController,
+    private readonly pipelineController: PipelineController,
   ) {}
 
   /**
@@ -35,6 +37,7 @@ export class TrpcRouter {
       auth: this.authController.createRouter(),
       exceptions: this.exceptionsController.createRouter(),
       executions: this.executionsController.createRouter(),
+      pipeline: this.pipelineController.createRouter(),
     });
   }
 }
