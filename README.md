@@ -1,4 +1,4 @@
-# Braintrust Test Project
+# Braintrust Project
 
 This is a monorepo containing a client and a server application, containerized with Docker.
 
