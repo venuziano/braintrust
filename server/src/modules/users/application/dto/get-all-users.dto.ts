@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const UserResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   phone: z.string().nullable(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),

@@ -1,16 +1,30 @@
 import React, { useState, useMemo } from 'react';
-import { useClients } from '../api/clients';
 import { useTotalWorkflows, useTotalRevenue } from '../api/workflows';
 import { useTotalExceptions } from '../api/exceptions';
 import { useTotalTimeSaved } from '../api/executions';
+import { useTotalActiveClients } from '../api/clients';
+import { useClients } from '../api/clients';
+import type { TimePeriod } from '../../../server/src/shared/dto/kpi.dto';
 import { KpiCard } from './ui/KpiCard';
 import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
 import { Pagination } from './ui/Pagination';
-import type { TimePeriod } from '../../../server/src/shared/dto/kpi.dto';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface PageContentProps {
   title: string;
+}
+
+interface ClientTableData {
+  id: number;
+  name: string;
+  contractStart: string | null;
+  workflowsCount: number;
+  nodesCount: number;
+  executionsCount: number;
+  exceptionsCount: number;
+  revenue: number;
+  timeSaved: number;
+  moneySaved: number;
 }
 
 // Map display labels to TimePeriod enum values
@@ -83,10 +97,11 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
   const { data: exceptionsData, isLoading: exceptionsLoading, error: exceptionsError } = useTotalExceptions(selectedTimePeriod);
   const { data: timeSavedData, isLoading: timeSavedLoading, error: timeSavedError } = useTotalTimeSaved(selectedTimePeriod);
   const { data: revenueData, isLoading: revenueLoading, error: revenueError } = useTotalRevenue(selectedTimePeriod);
+  const { data: activeClientsData, isLoading: activeClientsLoading, error: activeClientsError } = useTotalActiveClients(selectedTimePeriod);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const isLoading = workflowsLoading || exceptionsLoading || timeSavedLoading || revenueLoading;
-  const error = workflowsError || exceptionsError || timeSavedError || revenueError;
+  const isLoading = workflowsLoading || exceptionsLoading || timeSavedLoading || revenueLoading || activeClientsLoading;
+  const error = workflowsError || exceptionsError || timeSavedError || revenueError || activeClientsError;
   
   if (isLoading) {
     return (
@@ -95,6 +110,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
         gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
+        <KpiCardSkeleton />
         <KpiCardSkeleton />
         <KpiCardSkeleton />
         <KpiCardSkeleton />
@@ -123,7 +139,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     );
   }
 
-  if (!workflowsData || !exceptionsData || !timeSavedData|| !revenueData) {
+  if (!workflowsData || !exceptionsData || !timeSavedData || !revenueData || !activeClientsData) {
     return (
       <div style={{ 
         display: 'grid', 
@@ -150,16 +166,10 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
       gap: '16px' 
     }}>
       <KpiCard
-        label={revenueData.label}
-        value={`$${revenueData.value.toLocaleString()}`}
-        changePercentage={revenueData.changePercentage}
-        changeDirection={revenueData.changeDirection}
-      />
-      <KpiCard
-        label={timeSavedData.label}
-        value={`${timeSavedData.value}h`}
-        changePercentage={timeSavedData.changePercentage}
-        changeDirection={timeSavedData.changeDirection}
+        label={workflowsData.label}
+        value={workflowsData.value}
+        changePercentage={workflowsData.changePercentage}
+        changeDirection={workflowsData.changeDirection}
       />
       <KpiCard
         label={exceptionsData.label}
@@ -168,10 +178,22 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
         changeDirection={exceptionsData.changeDirection}
       />
       <KpiCard
-        label={workflowsData.label}
-        value={workflowsData.value}
-        changePercentage={workflowsData.changePercentage}
-        changeDirection={workflowsData.changeDirection}
+        label={timeSavedData.label}
+        value={`${timeSavedData.value}h`}
+        changePercentage={timeSavedData.changePercentage}
+        changeDirection={timeSavedData.changeDirection}
+      />
+      <KpiCard
+        label={revenueData.label}
+        value={`$${revenueData.value.toLocaleString()}`}
+        changePercentage={revenueData.changePercentage}
+        changeDirection={revenueData.changeDirection}
+      />
+      <KpiCard
+        label={activeClientsData.label}
+        value={activeClientsData.value}
+        changePercentage={activeClientsData.changePercentage}
+        changeDirection={activeClientsData.changeDirection}
       />
     </div>
   );
@@ -307,7 +329,7 @@ function ClientsTableContent() {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
           {tableHeaders}
           <tbody key={`table-body-${currentPage}`}>
-            {clientsData?.items?.map(c => (
+            {clientsData?.items?.map((c: ClientTableData) => (
               <tr
                 key={c.id}
                 style={{ 
