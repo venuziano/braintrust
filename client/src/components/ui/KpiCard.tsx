@@ -3,7 +3,7 @@ import { ArrowUp, ArrowDown } from 'lucide-react'
 
 type KpiCardProps = {
   label: string         // e.g. "Total Workflows"
-  value: number
+  value: number | string
   changePercentage: number
   changeDirection: 'up' | 'down'
 }

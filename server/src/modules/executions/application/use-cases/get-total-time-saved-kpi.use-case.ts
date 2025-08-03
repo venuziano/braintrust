@@ -16,7 +16,7 @@ export class GetTotalTimeSavedKpiUseCase extends BaseKpiUseCase {
   }
 
   async execute(request: KpiRequest): Promise<KpiResponse> {
-    const baseResponse = await this.executeBase(request, 'Total Time Saved');
+    const baseResponse = await this.executeBase(request, 'Time Saved');
     
     // Convert seconds to hours and format the value
     const hours = baseResponse.value / 3600; // Convert seconds to hours

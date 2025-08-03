@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useClients } from '../api/clients';
 import { useTotalWorkflows } from '../api/workflows';
 import { useTotalExceptions } from '../api/exceptions';
+import { useTotalTimeSaved } from '../api/executions';
 import { KpiCard } from './ui/KpiCard';
 import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
 import { Pagination } from './ui/Pagination';
@@ -80,10 +81,11 @@ function TimePeriodFilters({
 function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) {
   const { data: workflowsData, isLoading: workflowsLoading, error: workflowsError } = useTotalWorkflows(selectedTimePeriod);
   const { data: exceptionsData, isLoading: exceptionsLoading, error: exceptionsError } = useTotalExceptions(selectedTimePeriod);
+  const { data: timeSavedData, isLoading: timeSavedLoading, error: timeSavedError } = useTotalTimeSaved(selectedTimePeriod);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const isLoading = workflowsLoading || exceptionsLoading;
-  const error = workflowsError || exceptionsError;
+  const isLoading = workflowsLoading || exceptionsLoading || timeSavedLoading;
+  const error = workflowsError || exceptionsError || timeSavedError;
   
   if (isLoading) {
     return (
@@ -92,6 +94,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
         gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
+        <KpiCardSkeleton />
         <KpiCardSkeleton />
         <KpiCardSkeleton />
       </div>
@@ -118,7 +121,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     );
   }
 
-  if (!workflowsData || !exceptionsData) {
+  if (!workflowsData || !exceptionsData || !timeSavedData) {
     return (
       <div style={{ 
         display: 'grid', 
@@ -144,6 +147,12 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
       gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
       gap: '16px' 
     }}>
+      <KpiCard
+        label={timeSavedData.label}
+        value={`${timeSavedData.value}h`}
+        changePercentage={timeSavedData.changePercentage}
+        changeDirection={timeSavedData.changeDirection}
+      />
       <KpiCard
         label={exceptionsData.label}
         value={exceptionsData.value}
