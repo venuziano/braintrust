@@ -10,6 +10,7 @@ export function KpiCardSkeleton() {
       padding: '1rem',
       width: '100%',
       border: '1px solid var(--border)',
+      height: '141px'
     }}>
       {/* header skeleton */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>

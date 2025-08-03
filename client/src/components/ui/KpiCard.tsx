@@ -29,6 +29,7 @@ export function KpiCard({
       padding: '1rem',
       width: '100%',
       border: '1px solid var(--border)',
+      height: '141px'
     }}>
       {/* header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>

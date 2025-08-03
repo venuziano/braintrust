@@ -29,8 +29,6 @@ export class TypeOrmClientRepository implements ClientRepository {
       .skip((request.page - 1) * request.limit)
       .take(request.limit)
       .getRawMany<{ id: string }>();
-    
-    console.log('clientIds', clientIds);
 
     if (clientIds.length === 0) {
       return {
@@ -92,11 +90,6 @@ export class TypeOrmClientRepository implements ClientRepository {
       items,
       pagination: calculatePagination(request.page, request.limit, totalCount),
     };
-    
-    console.log('final result', {
-      itemsCount: result.items.length,
-      pagination: result.pagination
-    });
     
     return result;
   }
