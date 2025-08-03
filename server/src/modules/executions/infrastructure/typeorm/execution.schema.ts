@@ -1,11 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { BaseSchema } from "../../../../shared/entities/base.schema";
 import { WorkflowSchema } from "../../../workflows/infrastructure/typeorm/workflow.schema";
 import { ExceptionSchema } from "../../../exceptions/infrastructure/typeorm/exception.schema";
 
 @Entity("executions")
-export class ExecutionSchema {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class ExecutionSchema extends BaseSchema {
 
   @ManyToOne(() => WorkflowSchema, workflow => workflow.executions)
   @JoinColumn({ name: "workflow_id" })

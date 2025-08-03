@@ -5,6 +5,7 @@ import { ClientsController } from '../../modules/clients/clients.controller';
 import { WorkflowsController } from '../../modules/workflows/workflows.controller';
 import { AuthController } from '../../modules/auth/auth.controller';
 import { ExceptionsController } from '../../modules/exceptions/exceptions.controller';
+import { ExecutionsController } from '../../modules/executions/executions.controller';
 import { t } from './trpc.shared';
 
 /**
@@ -19,6 +20,7 @@ export class TrpcRouter {
     private readonly workflowsController: WorkflowsController,
     private readonly authController: AuthController,
     private readonly exceptionsController: ExceptionsController,
+    private readonly executionsController: ExecutionsController,
   ) {}
 
   /**
@@ -32,6 +34,7 @@ export class TrpcRouter {
       workflows: this.workflowsController.createRouter(),
       auth: this.authController.createRouter(),
       exceptions: this.exceptionsController.createRouter(),
+      executions: this.executionsController.createRouter(),
     });
   }
 }
