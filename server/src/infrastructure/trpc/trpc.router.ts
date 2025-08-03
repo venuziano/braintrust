@@ -7,6 +7,7 @@ import { AuthController } from '../../modules/auth/auth.controller';
 import { ExceptionsController } from '../../modules/exceptions/exceptions.controller';
 import { ExecutionsController } from '../../modules/executions/executions.controller';
 import { PipelineController } from '../../modules/pipeline/pipeline.controller';
+import { ClientDashboardController } from '../../modules/client-dashboard/client-dashboard.controller';
 import { t } from './trpc.shared';
 
 /**
@@ -23,6 +24,7 @@ export class TrpcRouter {
     private readonly exceptionsController: ExceptionsController,
     private readonly executionsController: ExecutionsController,
     private readonly pipelineController: PipelineController,
+    private readonly clientDashboardController: ClientDashboardController,
   ) {}
 
   /**
@@ -38,6 +40,7 @@ export class TrpcRouter {
       exceptions: this.exceptionsController.createRouter(),
       executions: this.executionsController.createRouter(),
       pipeline: this.pipelineController.createRouter(),
+      clientDashboard: this.clientDashboardController.createRouter(),
     });
   }
 }
