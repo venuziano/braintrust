@@ -10,7 +10,7 @@ import { KpiCardSkeleton } from '../shared/ui/KpiCardSkeleton';
 import { Pagination } from '../shared/ui/Pagination';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 
-interface PageContentProps {
+interface AdminDashboardProps {
   title: string;
 }
 
@@ -50,11 +50,10 @@ function TimePeriodFilters({
   return (
     <div style={{ 
       display: 'flex', 
-      gap: '8px', 
-      padding: '16px 0',
+      gap: isMobile ? '4px' : '8px', 
+      padding: isMobile ? '12px 0' : '16px 0',
       borderBottom: '1px solid var(--border)',
-      flexWrap: isMobile ? 'wrap' : 'nowrap',
-      overflowX: isMobile ? 'auto' : 'visible',
+      flexWrap: 'nowrap',
     }}>
       {TIME_PERIOD_OPTIONS.map((option) => (
         <button
@@ -72,6 +71,7 @@ function TimePeriodFilters({
             transition: 'all 0.2s ease',
             whiteSpace: 'nowrap',
             flexShrink: 0,
+            minWidth: isMobile ? '60px' : 'auto',
           }}
           onMouseEnter={(e) => {
             if (selectedTimePeriod !== option.value) {
@@ -263,7 +263,7 @@ function ClientsTableContent() {
         <th style={{ padding: '12px', fontWeight: '600', color: 'var(--foreground)' }}>Money Saved</th>
       </tr>
     </thead>
-  ), []); // Empty dependency array means this will never re-render
+  ), []);
 
   if (isLoading) {
     return (
@@ -405,7 +405,7 @@ function ClientsTable() {
   );
 }
 
-export function PageContent({ title }: PageContentProps) {
+export function AdminDashboard({ title }: AdminDashboardProps) {
   const [selectedTimePeriod, setSelectedTimePeriod] = useState<TimePeriod>('itd');
 
   return (

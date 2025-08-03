@@ -1,8 +1,15 @@
 import React from 'react';
-import { PageContent } from '../admin/PageContent';
+import { AdminDashboard } from '../admin/AdminDashboard';
 import { ClientDashboard } from '../client/ClientDashboard';
 import { ROIPage } from '../client/ROIPage';
 import type { Route } from '../../routes';
+import { AdminUsers } from '../admin/AdminUsers';
+import { AdminClients } from '../admin/AdminClients';
+import { AdminBilling } from '../admin/AdminBilling';
+import { AdminSubscriptions } from '../admin/AdminSubscriptions';
+import { AdminMessaging } from '../admin/AdminMessaging';
+import { AdminReporting } from '../admin/AdminReporting';
+import { AdminExceptions } from '../admin/AdminExceptions';
 
 interface RouteComponentProps {
   route: Route;
@@ -11,14 +18,14 @@ interface RouteComponentProps {
 export function RouteComponent({ route }: RouteComponentProps) {
   const componentMap: Record<string, React.ComponentType<{ title: string }>> = {
     // Admin components
-    'AdminDashboard': PageContent,
-    'AdminUsers': PageContent,
-    'AdminClients': PageContent,
-    'AdminBilling': PageContent,
-    'AdminSubscriptions': PageContent,
-    'AdminMessaging': PageContent,
-    'AdminReporting': PageContent,
-    'AdminExceptions': PageContent,
+    'AdminDashboard': AdminDashboard,
+    'AdminUsers': AdminUsers,
+    'AdminClients': AdminClients,
+    'AdminBilling': AdminBilling,
+    'AdminSubscriptions': AdminSubscriptions,
+    'AdminMessaging': AdminMessaging,
+    'AdminReporting': AdminReporting,
+    'AdminExceptions': AdminExceptions,
     
     // Client components
     'ClientDashboard': ClientDashboard,
