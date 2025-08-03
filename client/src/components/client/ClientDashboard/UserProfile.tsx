@@ -1,6 +1,141 @@
 import React from 'react';
+import { useSolutionsEngineerProfile } from '../../../api/solutions-engineer';
 
 export function UserProfile() {
+  const { data: seProfile, isLoading, error } = useSolutionsEngineerProfile();
+
+  // Generate initials from name
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        padding: 'clamp(16px, 2vw, 24px)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        border: '1px solid var(--border)',
+        height: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+      }}>
+        {/* Loading skeleton for profile section */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
+          {/* Loading skeleton for profile picture */}
+          <div style={{
+            width: 'clamp(80px, 12vw, 100px)',
+            height: 'clamp(80px, 12vw, 100px)',
+            borderRadius: '50%',
+            backgroundColor: 'var(--skeleton)',
+            animation: 'pulse 1.5s infinite ease-in-out',
+          }} />
+          
+          {/* Loading skeleton for user info */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            flex: 1,
+          }}>
+            <div style={{
+              width: '80%',
+              height: '20px',
+              backgroundColor: 'var(--skeleton)',
+              borderRadius: '4px',
+              animation: 'pulse 1.5s infinite ease-in-out',
+            }} />
+            <div style={{
+              width: '60%',
+              height: '16px',
+              backgroundColor: 'var(--skeleton)',
+              borderRadius: '4px',
+              animation: 'pulse 1.5s infinite ease-in-out',
+            }} />
+          </div>
+        </div>
+
+        {/* Loading skeleton for button */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+        }}>
+          <div style={{
+            width: '100%',
+            height: '40px',
+            backgroundColor: 'var(--skeleton)',
+            borderRadius: 'var(--radius)',
+            animation: 'pulse 1.5s infinite ease-in-out',
+          }} />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        padding: 'clamp(16px, 2vw, 24px)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        border: '1px solid var(--border)',
+        height: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'var(--destructive)',
+      }}>
+        <p>Error loading Solutions Engineer profile</p>
+        <p style={{ fontSize: '12px', color: 'var(--muted-foreground)' }}>
+          {error.message}
+        </p>
+      </div>
+    );
+  }
+
+  // Show no SE assigned state
+  if (!seProfile) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        padding: 'clamp(16px, 2vw, 24px)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        border: '1px solid var(--border)',
+        height: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'var(--muted-foreground)',
+      }}>
+        <p>No Solutions Engineer assigned</p>
+        <p style={{ fontSize: '12px', textAlign: 'center' }}>
+          Contact your administrator to assign a Solutions Engineer
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       backgroundColor: 'var(--card)',
@@ -48,7 +183,7 @@ export function UserProfile() {
               color: 'white',
               fontWeight: '600',
             }}>
-              JS
+              {getInitials(seProfile.name)}
             </span>
           </div>
         </div>
@@ -67,7 +202,7 @@ export function UserProfile() {
             margin: 0,
             textAlign: 'center'
           }}>
-            John Smith
+            {seProfile.name}
           </h3>
           <p style={{
             fontSize: '14px',
@@ -107,6 +242,10 @@ export function UserProfile() {
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.opacity = '1';
+        }}
+        onClick={() => {
+          // Open email client with SE's email
+          window.open(`mailto:${seProfile.email}`, '_blank');
         }}
         >
           {/* Message Icon */}
