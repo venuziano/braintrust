@@ -13,6 +13,7 @@ import { NodesModule } from '../../modules/nodes/nodes.module';
 import { AuthModule } from '../../modules/auth/auth.module';
 import { PipelineModule } from '../../modules/pipeline/pipeline.module';
 import { ClientDashboardModule } from '../../modules/client-dashboard/client-dashboard.module';
+import { SolutionsEngineerModule } from '../../modules/solutions-engineer/solutions-engineer.module';
 
 /**
  * tRPC module that exports the main router
@@ -30,7 +31,8 @@ import { ClientDashboardModule } from '../../modules/client-dashboard/client-das
     NodesModule, 
     AuthModule,
     PipelineModule,
-    ClientDashboardModule
+    ClientDashboardModule,
+    SolutionsEngineerModule
   ],
   providers: [TrpcRouter],
   exports: [TrpcRouter],
