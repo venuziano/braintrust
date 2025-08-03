@@ -6,7 +6,7 @@ import {
 } from './application/dto/get-client-pipeline-progress.dto';
 import { t } from '../../infrastructure/trpc/trpc.shared';
 import { JwtService } from '@nestjs/jwt';
-import { createProtectedProcedure } from '../../infrastructure/trpc/trpc.middleware';
+import { createProtectedProcedure, Role } from '../../infrastructure/trpc/trpc.middleware';
 
 @Injectable()
 export class PipelineController {
@@ -19,7 +19,10 @@ export class PipelineController {
     const protectedProcedure = createProtectedProcedure(this.jwtService);
     
     return t.router({
-      getClientPipelineProgress: protectedProcedure.client(this.jwtService)
+      getClientPipelineProgress: protectedProcedure.role({
+          roles: [Role.Client, Role.SolutionsEngineer, Role.Admin],
+          message: 'Client or Admin access required'
+        })
         .input(GetClientPipelineProgressRequestSchema)
         .output(GetClientPipelineProgressResponseSchema)
         .query(({ ctx }) => {

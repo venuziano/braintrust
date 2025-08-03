@@ -17,6 +17,12 @@ export interface RoleConfig {
   message?: string;
 }
 
+export enum Role {
+  Admin = 'Admin',
+  Client = 'Client',
+  SolutionsEngineer = 'Solutions Engineer',
+}
+
 // Middleware for JWT authentication
 export const createAuthMiddleware = (jwtService: JwtService) => {
   return t.middleware(async ({ ctx, next }) => {
@@ -99,7 +105,7 @@ export const createProtectedProcedure = (jwtService: JwtService) => {
     admin: (jwtService: JwtService) => {
       const authMiddleware = createAuthMiddleware(jwtService);
       const roleMiddleware = createRoleMiddleware({ 
-        roles: ['Admin'],
+        roles: [Role.Admin],
         message: 'Admin access required'
       });
       return t.procedure.use(authMiddleware).use(roleMiddleware);
@@ -108,7 +114,7 @@ export const createProtectedProcedure = (jwtService: JwtService) => {
     client: (jwtService: JwtService) => {
       const authMiddleware = createAuthMiddleware(jwtService);
       const roleMiddleware = createRoleMiddleware({ 
-        roles: ['Client', 'Solutions Engineer'],
+        roles: [Role.Client, Role.SolutionsEngineer],
         message: 'Client access required'
       });
       return t.procedure.use(authMiddleware).use(roleMiddleware);
