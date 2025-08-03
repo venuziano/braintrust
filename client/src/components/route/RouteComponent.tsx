@@ -1,7 +1,6 @@
 import React from 'react';
 import { AdminDashboard } from '../admin/AdminDashboard';
 import { ClientDashboard } from '../client/ClientDashboard';
-import { ROIPage } from '../client/ROIPage';
 import type { Route } from '../../routes';
 import { AdminUsers } from '../admin/AdminUsers';
 import { AdminClients } from '../admin/AdminClients';
@@ -10,6 +9,13 @@ import { AdminSubscriptions } from '../admin/AdminSubscriptions';
 import { AdminMessaging } from '../admin/AdminMessaging';
 import { AdminReporting } from '../admin/AdminReporting';
 import { AdminExceptions } from '../admin/AdminExceptions';
+import { ClientBilling } from '../client/ClientBilling';
+import { ClientCredentials } from '../client/ClientCredentials';
+import { ClientExceptions } from '../client/ClientExceptions';
+import { ClientMessaging } from '../client/ClientMessaging';
+import { ClientReporting } from '../client/ClientReporting';
+import { ClientUsers } from '../client/ClientUsers';
+import { ClientROI } from '../client/ClientROI';
 
 interface RouteComponentProps {
   route: Route;
@@ -29,7 +35,13 @@ export function RouteComponent({ route }: RouteComponentProps) {
     
     // Client components
     'ClientDashboard': ClientDashboard,
-    'ClientROI': ROIPage,
+    'ClientROI': ClientROI,
+    'ClientBilling': ClientBilling,
+    'ClientCredentials': ClientCredentials,
+    'ClientExceptions': ClientExceptions,
+    'ClientMessaging': ClientMessaging,
+    'ClientReporting': ClientReporting,
+    'ClientUsers': ClientUsers,
   };
 
   const Component = componentMap[route.component];

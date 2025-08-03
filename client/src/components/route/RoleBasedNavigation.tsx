@@ -9,6 +9,7 @@ import {
   BarChart2,
   AlertCircleIcon,
   TrendingUp,
+  KeyIcon,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -35,7 +36,13 @@ export function useNavigationItems() {
     
     // Client-only items
     { key: 'ClientDashboard', label: 'Dashboard', icon: HomeIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
-    { key: 'ROI', label: 'ROI', icon: TrendingUp, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'ROI', label: 'ROI', icon: TrendingUp, allowedRoles: ['Client', 'Solutions Engineer'] }, 
+    { key: 'Reporting', label: 'Reporting', icon: BarChart2, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'Credentials', label: 'Credentials', icon: KeyIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'Exceptions', label: 'Exceptions', icon: AlertCircleIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'Users', label: 'Users', icon: UsersIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'Billing', label: 'Billing', icon: CreditCardIcon, allowedRoles: ['Client', 'Solutions Engineer'] },
+    { key: 'Messaging', label: 'Messaging', icon: MessageSquare, allowedRoles: ['Client', 'Solutions Engineer'] },
   ];
 
   // Filter navigation items based on user role

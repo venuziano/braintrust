@@ -1,4 +1,4 @@
-import type { NavItem } from '../components/RoleBasedNavigation';
+import type { NavItem } from '../components/route/RoleBasedNavigation';
 import {
   HomeIcon,
   UsersIcon,
@@ -9,6 +9,7 @@ import {
   BarChart2,
   AlertCircleIcon,
   TrendingUp,
+  KeyIcon,
 } from 'lucide-react';
 
 export interface Route {
@@ -35,6 +36,12 @@ export const ADMIN_ROUTES: Route[] = [
 export const CLIENT_ROUTES: Route[] = [
   { name: 'Dashboard', path: 'client/dashboard', component: 'ClientDashboard', allowedRoles: ['Client'], icon: HomeIcon },
   { name: 'ROI', path: 'client/roi', component: 'ClientROI', allowedRoles: ['Client'], icon: TrendingUp },
+  { name: 'Reporting', path: 'client/reporting', component: 'ClientReporting', allowedRoles: ['Client'], icon: BarChart2 },
+  { name: 'Credentials', path: 'client/credentials', component: 'ClientCredentials', allowedRoles: ['Client'], icon: KeyIcon },
+  { name: 'Exceptions', path: 'client/exceptions', component: 'ClientExceptions', allowedRoles: ['Client'], icon: AlertCircleIcon },
+  { name: 'Users', path: 'client/users', component: 'ClientUsers', allowedRoles: ['Client'], icon: UsersIcon },
+  { name: 'Billing', path: 'client/billing', component: 'ClientBilling', allowedRoles: ['Client'], icon: CreditCardIcon },
+  { name: 'Messaging', path: 'client/messaging', component: 'ClientMessaging', allowedRoles: ['Client'], icon: MessageSquare },
 ];
 
 // All routes combined

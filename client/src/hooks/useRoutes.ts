@@ -9,7 +9,7 @@ import {
 } from '../routes';
 
 export function useRoutes() {
-  const { user, isAdmin, isClient, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const [currentRoute, setCurrentRoute] = useState<Route | null>(null);
   const [navItems, setNavItems] = useState<any[]>([]);
 
