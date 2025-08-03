@@ -4,7 +4,7 @@ import { useTotalWorkflows } from '../api/workflows';
 import { KpiCard } from './ui/KpiCard';
 import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
 import { Pagination } from './ui/Pagination';
-import type { TimePeriod } from '../../../server/src/modules/workflows/application/dto/get-total-workflows-kpi.dto';
+import type { TimePeriod } from '../../../server/src/shared/dto/kpi.dto';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface PageContentProps {

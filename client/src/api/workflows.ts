@@ -1,4 +1,4 @@
-import type { TimePeriod } from '../../../server/src/modules/workflows/application/dto/get-total-workflows-kpi.dto';
+import type { TimePeriod } from '../../../server/src/shared/dto/kpi.dto';
 import { trpc } from '../utils/trpc';
 
 /**

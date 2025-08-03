@@ -1,13 +1,9 @@
 import { Workflow } from "../entities/workflow.entity";
-import { TimePeriod } from "../../application/dto/get-total-workflows-kpi.dto";
+import { IKpiRepository } from "../../../../shared/modules/kpi/domain/repositories/kpi.repository.interface";
 
 export const WORKFLOW_REPOSITORY_TOKEN = "WorkflowRepository";
  
-export interface WorkflowRepository {
+export interface WorkflowRepository extends IKpiRepository {
   findAll(): Promise<Workflow[]>;
   findById(id: number): Promise<Workflow | null>;
-  getTotalWorkflowsKpi(timePeriod: TimePeriod): Promise<{
-    currentCount: number;
-    previousCount: number;
-  }>;
 } 
