@@ -1,4 +1,5 @@
 import React from 'react';
+import { useClientDashboard } from '../../../api/client-dashboard';
 
 interface KpiCardProps {
   title: string;
@@ -7,9 +8,48 @@ interface KpiCardProps {
   rightValue?: string;
   rightLabel?: string;
   actionLink?: string;
+  isLoading?: boolean;
+  error?: string | null;
 }
 
-function KpiCard({ title, leftValue, leftLabel, rightValue, rightLabel, actionLink }: KpiCardProps) {
+function KpiCard({ title, leftValue, leftLabel, rightValue, rightLabel, actionLink, isLoading, error }: KpiCardProps) {
+  if (isLoading) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        padding: 'clamp(16px, 2vw, 20px)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        border: '1px solid var(--border)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        animation: 'pulse 1.5s infinite ease-in-out',
+      }}>
+        <div style={{ width: '80%', height: '20px', backgroundColor: 'var(--skeleton)', borderRadius: '4px' }}></div>
+        <div style={{ width: '60%', height: '24px', backgroundColor: 'var(--skeleton)', borderRadius: '4px' }}></div>
+        <div style={{ width: '40%', height: '16px', backgroundColor: 'var(--skeleton)', borderRadius: '4px' }}></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        padding: 'clamp(16px, 2vw, 20px)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        border: '1px solid var(--border)',
+        color: 'var(--destructive)',
+        textAlign: 'center',
+      }}>
+        <h3 style={{ fontSize: 'clamp(16px, 2.2vw, 18px)', fontWeight: '600', margin: '0 0 8px' }}>{title}</h3>
+        <p>Error loading data.</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       backgroundColor: 'var(--card)',
@@ -117,6 +157,14 @@ function KpiCard({ title, leftValue, leftLabel, rightValue, rightLabel, actionLi
 }
 
 export function KpiSection() {
+  const { data: dashboardData, isLoading, error } = useClientDashboard();
+
+  // Format time values to show hours with 1 decimal place
+  const formatTime = (hours: number) => `${hours.toFixed(1)} hrs`;
+  
+  // Format money values with commas and 2 decimal places
+  const formatMoney = (amount: number) => `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
   return (
     <div style={{
       display: 'flex',
@@ -125,25 +173,31 @@ export function KpiSection() {
     }}>
       <KpiCard
         title="Time Saved"
-        leftValue="24.5 hrs"
+        leftValue={dashboardData ? formatTime(dashboardData.timeSaved.last7Days) : "0.0 hrs"}
         leftLabel="Last 7 days"
-        rightValue="168.2 hrs"
+        rightValue={dashboardData ? formatTime(dashboardData.timeSaved.allTime) : "0.0 hrs"}
         rightLabel="All time"
+        isLoading={isLoading}
+        error={error?.message}
       />
       
       <KpiCard
         title="Money Saved"
-        leftValue="$2,450"
+        leftValue={dashboardData ? formatMoney(dashboardData.moneySaved.last7Days) : "$0.00"}
         leftLabel="Last 7 days"
-        rightValue="$16,820"
+        rightValue={dashboardData ? formatMoney(dashboardData.moneySaved.allTime) : "$0.00"}
         rightLabel="All time"
+        isLoading={isLoading}
+        error={error?.message}
       />
       
       <KpiCard
         title="Active Workflows"
-        leftValue="12"
+        leftValue={dashboardData ? dashboardData.activeWorkflows.toString() : "0"}
         leftLabel=""
         actionLink="View workflows"
+        isLoading={isLoading}
+        error={error?.message}
       />
     </div>
   );
