@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useClients } from '../api/clients';
 import { useTotalWorkflows } from '../api/workflows';
+import { useTotalExceptions } from '../api/exceptions';
 import { KpiCard } from './ui/KpiCard';
 import { KpiCardSkeleton } from './ui/KpiCardSkeleton';
 import { Pagination } from './ui/Pagination';
@@ -77,9 +78,12 @@ function TimePeriodFilters({
 
 // KPI Section Component
 function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) {
-  const { data: workflowsData, isLoading, error } = useTotalWorkflows(selectedTimePeriod);
+  const { data: workflowsData, isLoading: workflowsLoading, error: workflowsError } = useTotalWorkflows(selectedTimePeriod);
+  const { data: exceptionsData, isLoading: exceptionsLoading, error: exceptionsError } = useTotalExceptions(selectedTimePeriod);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isLoading = workflowsLoading || exceptionsLoading;
+  const error = workflowsError || exceptionsError;
   
   if (isLoading) {
     return (
@@ -88,6 +92,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
         gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
         gap: '16px' 
       }}>
+        <KpiCardSkeleton />
         <KpiCardSkeleton />
       </div>
     );
@@ -113,7 +118,7 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
     );
   }
 
-  if (!workflowsData) {
+  if (!workflowsData || !exceptionsData) {
     return (
       <div style={{ 
         display: 'grid', 
@@ -139,6 +144,12 @@ function KpiSection({ selectedTimePeriod }: { selectedTimePeriod: TimePeriod }) 
       gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', 
       gap: '16px' 
     }}>
+      <KpiCard
+        label={exceptionsData.label}
+        value={exceptionsData.value}
+        changePercentage={exceptionsData.changePercentage}
+        changeDirection={exceptionsData.changeDirection}
+      />
       <KpiCard
         label={workflowsData.label}
         value={workflowsData.value}
