@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { X } from 'lucide-react'
 import { Header } from './components/shared/layout/Header'
-import { RouteComponent } from './components/route/RouteComponent'
+import { LazyRouteComponent } from './components/route/LazyRouteComponent'
 import { RouteGuard } from './components/route/RouteGuard'
 import { LoginPage } from './components/shared/auth/LoginPage'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
@@ -266,7 +266,7 @@ function AppContent() {
         >
           {/* Route Component Rendering */}
           {currentRoute ? (
-            <RouteComponent route={currentRoute} />
+            <LazyRouteComponent route={currentRoute} />
           ) : (
             <div style={{
               display: 'flex',
