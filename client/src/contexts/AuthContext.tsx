@@ -68,8 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.history.pushState({}, '', '/');
   };
 
-  const isAdmin = user?.role === 'Admin' || user?.role === 'Solutions Engineer';
-  const isClient = user?.role === 'Client';
+  const isAdmin = user?.role === 'Admin';
+  const isClient = user?.role === 'Client' || user?.role === 'Solutions Engineer';
 
   return (
     <AuthContext.Provider value={{ 

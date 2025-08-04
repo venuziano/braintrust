@@ -22,14 +22,14 @@ export interface Route {
 
 // Admin routes
 export const ADMIN_ROUTES: Route[] = [
-  { name: 'Dashboard', path: 'admin/dashboard', component: 'AdminDashboard', allowedRoles: ['Admin', 'Solutions Engineer'], icon: HomeIcon },
-  { name: 'Users', path: 'admin/users', component: 'AdminUsers', allowedRoles: ['Admin', 'Solutions Engineer'], icon: UsersIcon },
-  { name: 'Clients', path: 'admin/clients', component: 'AdminClients', allowedRoles: ['Admin', 'Solutions Engineer'], icon: BriefcaseIcon },
-  { name: 'Billing', path: 'admin/billing', component: 'AdminBilling', allowedRoles: ['Admin', 'Solutions Engineer'], icon: CreditCardIcon },
-  { name: 'Subscriptions', path: 'admin/subscriptions', component: 'AdminSubscriptions', allowedRoles: ['Admin', 'Solutions Engineer'], icon: RepeatIcon },
-  { name: 'Messaging', path: 'admin/messaging', component: 'AdminMessaging', allowedRoles: ['Admin', 'Solutions Engineer'], icon: MessageSquare },
-  { name: 'Reporting', path: 'admin/reporting', component: 'AdminReporting', allowedRoles: ['Admin', 'Solutions Engineer'], icon: BarChart2 },
-  { name: 'Exceptions', path: 'admin/exceptions', component: 'AdminExceptions', allowedRoles: ['Admin', 'Solutions Engineer'], icon: AlertCircleIcon },
+  { name: 'Dashboard', path: 'admin/dashboard', component: 'AdminDashboard', allowedRoles: ['Admin'], icon: HomeIcon },
+  { name: 'Users', path: 'admin/users', component: 'AdminUsers', allowedRoles: ['Admin'], icon: UsersIcon },
+  { name: 'Clients', path: 'admin/clients', component: 'AdminClients', allowedRoles: ['Admin'], icon: BriefcaseIcon },
+  { name: 'Billing', path: 'admin/billing', component: 'AdminBilling', allowedRoles: ['Admin'], icon: CreditCardIcon },
+  { name: 'Subscriptions', path: 'admin/subscriptions', component: 'AdminSubscriptions', allowedRoles: ['Admin'], icon: RepeatIcon },
+  { name: 'Messaging', path: 'admin/messaging', component: 'AdminMessaging', allowedRoles: ['Admin'], icon: MessageSquare },
+  { name: 'Reporting', path: 'admin/reporting', component: 'AdminReporting', allowedRoles: ['Admin'], icon: BarChart2 },
+  { name: 'Exceptions', path: 'admin/exceptions', component: 'AdminExceptions', allowedRoles: ['Admin'], icon: AlertCircleIcon },
 ];
 
 // Client routes
@@ -49,10 +49,10 @@ export const ALL_ROUTES = [...ADMIN_ROUTES, ...CLIENT_ROUTES];
 
 // Route utilities
 export function getRoutesByRole(role: string): Route[] {
-  if (role === 'Admin' || role === 'Solutions Engineer') {
+  if (role === 'Admin') {
     return ADMIN_ROUTES;
   }
-  if (role === 'Client') {
+  if (role === 'Client' || role === 'Solutions Engineer') {
     return CLIENT_ROUTES;
   }
   return [];
