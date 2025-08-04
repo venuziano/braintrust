@@ -247,32 +247,24 @@ export class SeedData1622548800001 implements MigrationInterface {
     `);
 
     await queryRunner.query(`
-      WITH client_cte AS (
-        -- find Carol’s client
-        SELECT c.id AS client_id
-        FROM clients c
-        JOIN client_users cu ON cu.client_id = c.id
-        JOIN users u          ON u.id         = cu.user_id
-        WHERE u.name = 'Carol Client'
-      ), data AS (
+      WITH data AS (
         SELECT
-          3,
-          pp.id                           AS pipeline_phase_id,
-          -- statuses: first 3 completed, 4th in_progress, rest not_started
+          3 AS client_id,
+          pp.id AS pipeline_phase_id,
+          /* statuses: first 3 completed, 4th in_progress, rest not_started */
           CASE
             WHEN pp.phase_order <= 3 THEN 'completed'
             WHEN pp.phase_order = 4 THEN 'in_progress'
             ELSE 'not_started'
           END::pipeline_phase_status AS status,
-          -- random completed_at for the completed ones
+          /* random completed_at for the completed ones */
           CASE
             WHEN pp.phase_order <= 3 THEN now() - random() * INTERVAL '365 days'
             ELSE NULL
           END AS completed_at,
-          -- created_at / updated_at watermark
+          /* created_at / updated_at watermark */
           now() - random() * INTERVAL '365 days' AS ts
-        FROM client_cte
-        CROSS JOIN pipeline_phases pp
+        FROM pipeline_phases pp
       )
       INSERT INTO client_pipeline_progress (
         client_id,
