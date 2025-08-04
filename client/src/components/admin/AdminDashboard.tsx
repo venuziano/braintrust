@@ -247,6 +247,8 @@ function ClientsTableHeader() {
 function ClientsTableContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: clientsData, isLoading, error } = useClients(currentPage, 10);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
 
   // Memoize the table headers to prevent re-rendering
   const tableHeaders = useMemo(() => (
@@ -313,6 +315,125 @@ function ClientsTableContent() {
     );
   }
 
+  // Mobile/Tablet Card Layout
+  if (isMobile || isTablet) {
+    return (
+      <>
+        <div style={{
+          display: 'grid',
+          gap: '16px',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
+        }}>
+          {clientsData?.items?.map((c: ClientTableData) => (
+            <div
+              key={c.id}
+              style={{
+                backgroundColor: 'var(--card)',
+                borderRadius: 'var(--radius)',
+                padding: '16px',
+                border: '1px solid var(--border)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+              }}
+            >
+              {/* Client Name */}
+              <div style={{ marginBottom: '12px' }}>
+                <a
+                  href={`/clients/${c.id}`}
+                  style={{ 
+                    color: 'var(--primary)', 
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '16px',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.textDecoration = 'underline';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.textDecoration = 'none';
+                  }}
+                >
+                  {c.name}
+                </a>
+              </div>
+
+              {/* Metrics Grid */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '8px',
+                fontSize: '14px',
+              }}>
+                <div style={{ color: 'var(--muted-foreground)' }}>
+                  <span style={{ fontWeight: '500' }}>Contract:</span> {c.contractStart || 'N/A'}
+                </div>
+                <div>
+                  <span style={{ fontWeight: '500' }}>Workflows:</span> {c.workflowsCount}
+                </div>
+                <div>
+                  <span style={{ fontWeight: '500' }}>Nodes:</span> {c.nodesCount}
+                </div>
+                <div>
+                  <span style={{ fontWeight: '500' }}>Executions:</span> {c.executionsCount}
+                </div>
+                <div>
+                  <span style={{ fontWeight: '500' }}>Exceptions:</span> {c.exceptionsCount}
+                </div>
+                <div style={{ color: 'var(--muted-foreground)' }}>
+                  <span style={{ fontWeight: '500' }}>Time Saved:</span> {c.timeSaved}
+                </div>
+              </div>
+
+              {/* Revenue and Money Saved */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '12px',
+                paddingTop: '12px',
+                borderTop: '1px solid var(--border)',
+                fontSize: '14px',
+                fontWeight: '600',
+              }}>
+                <div style={{ color: 'var(--primary)' }}>
+                  Revenue: ${c.revenue.toLocaleString()}
+                </div>
+                <div style={{ color: 'var(--primary)' }}>
+                  Saved: ${c.moneySaved.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div style={{ 
+          textAlign: 'center', 
+          marginTop: '16px', 
+          color: 'var(--muted-foreground)',
+          fontSize: '14px'
+        }}>
+          Showing {clientsData.items.length} of {clientsData.pagination.total} clients
+        </div>
+        <Pagination
+          currentPage={clientsData.pagination.page}
+          totalPages={clientsData.pagination.totalPages}
+          hasNext={clientsData.pagination.hasNext}
+          hasPrev={clientsData.pagination.hasPrev}
+          onPageChange={setCurrentPage}
+        />
+      </>
+    );
+  }
+
+  // Desktop Table Layout
   return (
     <>
       {/* Card Table */}
@@ -326,7 +447,7 @@ function ClientsTableContent() {
         flex: 1,
         border: '1px solid var(--border)',
       }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           {tableHeaders}
           <tbody key={`table-body-${currentPage}`}>
             {clientsData?.items?.map((c: ClientTableData) => (
