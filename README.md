@@ -52,7 +52,7 @@ To get the application running, execute the following command from the root of t
 docker compose down && docker compose up -d --force-recreate
 ```
 
-Note: The server container automatically runs migrations to create the database schema and seed it. You may need to wait a few seconds for the container to finish initializing.
+**Note:** The server container automatically runs migrations to create the database schema and seed it. You may need to wait a few seconds for the container to finish initializing before the client becomes available.
 
 This command will build the images for both the client and server, and then start the containers in detached mode.
 
